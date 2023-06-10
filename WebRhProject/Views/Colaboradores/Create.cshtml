@@ -1,0 +1,73 @@
+﻿@model WebRhProject.Models.ViewModels.ColaboradorFormViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Colaborador</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Colaborador.Nome" class="control-label"></label>
+                <input asp-for="Colaborador.Nome" class="form-control" />
+                <span asp-validation-for="Colaborador.Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.Sobrenome" class="control-label"></label>
+                <input asp-for="Colaborador.Sobrenome" class="form-control" />
+                <span asp-validation-for="Colaborador.Sobrenome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.SalarioBase" class="control-label"></label>
+                <input asp-for="Colaborador.SalarioBase" class="form-control" />
+                <span asp-validation-for="Colaborador.SalarioBase" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.DataNascimento" class="control-label"></label>
+                <input asp-for="Colaborador.DataNascimento" class="form-control" />
+                <span asp-validation-for="Colaborador.DataNascimento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.DataAdmissao" class="control-label"></label>
+                <input asp-for="Colaborador.DataAdmissao" class="form-control" />
+                <span asp-validation-for="Colaborador.DataAdmissao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.Dependentes" class="control-label"></label>
+                <input asp-for="Colaborador.Dependentes" class="form-control" />
+                <span asp-validation-for="Colaborador.Dependentes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.Filhos" class="control-label"></label>
+                <input asp-for="Colaborador.Filhos" class="form-control" />
+                <span asp-validation-for="Colaborador.Filhos" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Colaborador.CargoId" class="control-label">Cargo</label>
+                <select asp-for="Colaborador.CargoId" asp-items="@(new SelectList(Model.Cargos,"Id","Nome"))" class="form-control">
+                    <option value="">Selecione um cargo</option>
+                </select>
+                <span asp-validation-for="Colaborador.CargoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
