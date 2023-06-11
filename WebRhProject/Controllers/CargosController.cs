@@ -55,7 +55,7 @@ namespace WebRhProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Cargo cargo)
+        public async Task<IActionResult> Create([Bind("Id,Nome")] Cargo cargo)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace WebRhProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Cargo cargo)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] Cargo cargo)
         {
             if (id != cargo.Id)
             {

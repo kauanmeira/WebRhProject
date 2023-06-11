@@ -8,8 +8,8 @@ using WebRhProject.Models;
 using WebRhProject.Services.Exceptions;
 
 namespace WebRhProject.Services
-    {
-        public class ColaboradorService
+{
+    public class ColaboradorService
     {
         private readonly Contexto _context;
 
@@ -28,5 +28,33 @@ namespace WebRhProject.Services
             _context.Add(obj);
             _context.SaveChanges();
         }
+        public Colaborador FindById(int id)
+        {
+            return _context.Colaborador.Include(obj => obj.Cargo).FirstOrDefault(obj => obj.Id == id);
+        }
+
+        public void Remove(int id)
+        {
+            var obj = _context.Colaborador.Find(id);
+            _context.Colaborador.Remove(obj);
+            _context.SaveChanges();
+        }
+
+        public void Update(Colaborador obj)
+        {
+            if (!_context.Colaborador.Any(x => x.Id == obj.Id))
+            {
+                throw new NotFoundException("Id not found");
+            }
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
+        }
     }
-    }
+}
