@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Linq;
 using WebRhProject.Models;
 
 namespace WebRhProject.Models
@@ -9,8 +11,15 @@ namespace WebRhProject.Models
         public int Id { get; set; }
         public string Nome { get; set; }
         public string Sobrenome { get; set; }
+        [Display(Name = "Salário Base")]
         public double SalarioBase { get; set; }
+        [Display(Name = "Data de Nascimento")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataNascimento { get; set; }
+        [Display(Name = "Data de Admissão")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataAdmissao { get; set; }
         public int Dependentes { get; set; }
         public int Filhos { get; set; }
