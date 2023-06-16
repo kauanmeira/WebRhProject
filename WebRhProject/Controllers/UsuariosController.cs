@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using WebRhProject.Data;
 using WebRhProject.Models;
 using WebRhProject.Models.ViewModels;
 using WebRhProject.Services;
@@ -14,41 +15,50 @@ using WebRhProject.Services.Exceptions;
 namespace WebRhProject.Controllers
 
 {
-    public class ColaboradoresController : Controller
+    public class UsuariosController : Controller
     {
+        private readonly UsuarioService _usuarioService;
         private readonly ColaboradorService _colaboradorService;
-        private readonly CargoService _cargoService;
-        private readonly EmpresaService _empresaService;
+        private readonly Contexto _context;
 
-        public ColaboradoresController(ColaboradorService colaboradorService, CargoService cargoService, EmpresaService empresaService)
+
+        public UsuariosController(UsuarioService usuarioService, ColaboradorService colaboradorService)
         {
+            _usuarioService = usuarioService;
             _colaboradorService = colaboradorService;
-            _cargoService = cargoService;
-            _empresaService = empresaService;
+           
         }
 
         public IActionResult Index()
         {
-            var list = _colaboradorService.FindAll();
+            var list = _usuarioService.FindAll();
             return View(list);
         }
 
         public IActionResult Create()
         {
-            var cargos = _cargoService.FindAll();
-            var empresas = _empresaService.FindAll();
-            var viewModel = new ColaboradorFormViewModel { Cargos = cargos, Empresas = empresas };
+            var colaboradores = _colaboradorService.FindAll();
+            var viewModel = new UsuarioFormViewModel { Colaboradores = colaboradores };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Colaborador colaborador)
+        public IActionResult Create(Usuario usuario)
         {
+            if (_usuarioService.EmailExists(usuario.Email))
+            {
+                ModelState.AddModelError("Email", "Email já cadastrado");
+                var colaboradores = _colaboradorService.FindAll();
+                var viewModel = new UsuarioFormViewModel { Usuario = usuario, Colaboradores = colaboradores };
+                return View(viewModel);
+            }
 
-            _colaboradorService.Insert(colaborador);
+            _usuarioService.Insert(usuario);
             return RedirectToAction(nameof(Index));
         }
+
+
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -56,7 +66,7 @@ namespace WebRhProject.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
 
-            var obj = _colaboradorService.FindById(id.Value);
+            var obj = _usuarioService.FindById(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -69,7 +79,7 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
-            _colaboradorService.Remove(id);
+            _usuarioService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
 
@@ -80,7 +90,7 @@ namespace WebRhProject.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
 
-            var obj = _colaboradorService.FindById(id.Value);
+            var obj = _usuarioService.FindById(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
@@ -96,29 +106,28 @@ namespace WebRhProject.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not provided" });
             }
 
-            var obj = _colaboradorService.FindById(id.Value);
+            var obj = _usuarioService.FindById(id.Value);
             if (obj == null)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
-            List<Cargo> cargos = _cargoService.FindAll();
-            List<Empresa> empresas = _empresaService.FindAll();
-            ColaboradorFormViewModel viewModel = new ColaboradorFormViewModel { Colaborador = obj, Cargos = cargos, Empresas = empresas };
+            List<Colaborador> colaboradores = _colaboradorService.FindAll();
+            UsuarioFormViewModel viewModel = new UsuarioFormViewModel { Usuario = obj, Colaboradores = colaboradores };
             return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Colaborador colaborador)
+        public IActionResult Edit(int id, Usuario usuario)
         {
-            if (id != colaborador.Id)
+            if (id != usuario.Id)
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
             try
             {
-                _colaboradorService.Update(colaborador);
+                _usuarioService.Update(usuario);
                 return RedirectToAction(nameof(Index));
             }
             catch (ApplicationException e)

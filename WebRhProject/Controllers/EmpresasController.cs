@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebRhProject.Data;
+using WebRhProject.Data.Migrations;
 using WebRhProject.Models;
 using WebRhProject.Services;
 
@@ -63,6 +64,27 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Cnpj,RazaoSocial,NomeFantasia")] Empresa empresa)
         {
+            bool cnpjExists = await _context.Empresa.AnyAsync(u => u.Cnpj == empresa.Cnpj);
+
+            if (cnpjExists)
+            {
+                ModelState.AddModelError("Cnpj", "Já existe uma empresa cadastrada com esse cnpj.");
+                return View(empresa);
+            }
+            bool razaoExists = await _context.Empresa.AnyAsync(u => u.RazaoSocial == empresa.RazaoSocial);
+
+            if (razaoExists)
+            {
+                ModelState.AddModelError("Razão Social", "Já existe uma empresa cadastrada com essa razão social");
+                return View(empresa);
+            }
+            bool nomeExists = await _context.Empresa.AnyAsync(u => u.NomeFantasia == empresa.NomeFantasia);
+
+            if (nomeExists)
+            {
+                ModelState.AddModelError("Nome Fantasia", "Já existe uma empresa cadastrada com esse nome fantasia");
+                return View(empresa);
+            }
             if (ModelState.IsValid)
             {
                 _context.Empresa.Add(empresa);
