@@ -9,51 +9,53 @@
     <link rel="stylesheet" href="~/WebRhProject.styles.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RhProject</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="cadastrosDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Cadastros
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="cadastrosDropdown">
-                                <a class="dropdown-item" asp-area="" asp-controller="Colaboradores" asp-action="Create">Cadastrar Colaborador</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Cargos" asp-action="Create">Cadastrar Cargo</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Create">Cadastrar Empresa</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Create">Cadastrar Usuario</a>
-
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="listarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Consultar
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="listarDropdown">
-                                <a class="dropdown-item" asp-area="" asp-controller="Colaboradores" asp-action="Index">Colaboradores</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Cargos" asp-action="Index">Cargos</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
-
-                            </div>
-                        </li>
-                    </ul>
+    @if (!ViewContext.RouteData.Values["action"].ToString().Equals("Login", StringComparison.OrdinalIgnoreCase))
+    {
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">RhProject</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="cadastrosDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Cadastros
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="cadastrosDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Colaboradores" asp-action="Create">Cadastrar Colaborador</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Cargos" asp-action="Create">Cadastrar Cargo</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Create">Cadastrar Empresa</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Create">Cadastrar Usuario</a>
+                                </div>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="listarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Consultar
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="listarDropdown">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Colaboradores" asp-action="Index">Colaboradores</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Cargos" asp-action="Index">Cargos</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
+    }
+
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

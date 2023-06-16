@@ -4,11 +4,13 @@ using WebRhProject.Data;
 using WebRhProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddDbContext<Contexto>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Contexto") ?? throw new InvalidOperationException("Connection string 'Contexto' not found.")));
 
 // Add services to the container.
 var services = builder.Services;
+
+services.AddDbContext<Contexto>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Contexto") ?? throw new InvalidOperationException("Connection string 'Contexto' not found.")));
+
 services.AddControllersWithViews();
 services.AddScoped<CargoService>();
 services.AddScoped<ColaboradorService>();
@@ -30,10 +32,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Usuarios}/{action=Login}/{id?}");
 
 app.Run();

@@ -57,4 +57,9 @@ public class UsuarioService
     {
         return _context.Usuario.Any(u => u.Email == email);
     }
+    public Usuario FindByEmailAndPassword(string email, string senha)
+    {
+        return _context.Usuario.FirstOrDefault(u => u.Email == email && u.Senha == senha);
+    }
+
 }

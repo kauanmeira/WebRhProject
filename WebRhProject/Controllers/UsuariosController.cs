@@ -145,5 +145,44 @@ namespace WebRhProject.Controllers
             };
             return View(viewModel);
         }
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(LoginViewModel login)
+        {
+            if (ModelState.IsValid)
+            {
+                if (IsValidLogin(login.Email, login.Senha))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Credenciais inválidas. Verifique seu email e senha.");
+                }
+            }
+
+            return View(login);
+        }
+
+        private bool IsValidLogin(string email, string senha)
+        {
+            var usuario = _usuarioService.FindByEmailAndPassword(email, senha);
+
+            if (usuario != null)
+            {
+                // Credenciais válidas
+                return true;
+            }
+
+            // Credenciais inválidas
+            return false;
+        }
     }
+
 }
+
