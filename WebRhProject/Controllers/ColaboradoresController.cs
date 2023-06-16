@@ -18,11 +18,13 @@ namespace WebRhProject.Controllers
     {
         private readonly ColaboradorService _colaboradorService;
         private readonly CargoService _cargoService;
+        private readonly EmpresaService _empresaService;
 
-        public ColaboradoresController(ColaboradorService colaboradorService, CargoService cargoService)
+        public ColaboradoresController(ColaboradorService colaboradorService, CargoService cargoService, EmpresaService empresaService)
         {
             _colaboradorService = colaboradorService;
             _cargoService = cargoService;
+            _empresaService = empresaService;
         }
 
         public IActionResult Index()
@@ -34,7 +36,8 @@ namespace WebRhProject.Controllers
         public IActionResult Create()
         {
             var cargos = _cargoService.FindAll();
-            var viewModel = new ColaboradorFormViewModel { Cargos = cargos };
+            var empresas = _empresaService.FindAll();
+            var viewModel = new ColaboradorFormViewModel { Cargos = cargos, Empresas = empresas };
             return View(viewModel);
         }
 
@@ -99,7 +102,8 @@ namespace WebRhProject.Controllers
             }
 
             List<Cargo> cargos = _cargoService.FindAll();
-            ColaboradorFormViewModel viewModel = new ColaboradorFormViewModel { Colaborador = obj, Cargos = cargos };
+            List<Empresa> empresas = _empresaService.FindAll();
+            ColaboradorFormViewModel viewModel = new ColaboradorFormViewModel { Colaborador = obj, Cargos = cargos, Empresas = empresas };
             return View(viewModel);
         }
 

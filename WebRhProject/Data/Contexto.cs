@@ -17,5 +17,6 @@ namespace WebRhProject.Data
         public DbSet<Colaborador> Colaborador { get; set; } = default!;
 
         public DbSet<Cargo>? Cargo { get; set; }
+        public DbSet<Empresa> Empresa { get; set; }
     }
 }

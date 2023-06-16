@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RhProject</title>
+    <title>@ViewData["Title"] - WebRhProject</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-interface.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/RhProject.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebRhProject.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
@@ -25,11 +25,25 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Colaboradores" asp-action="Index">Colaboradores</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="cadastrosDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Cadastros
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="cadastrosDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Colaboradores" asp-action="Create">Cadastrar Colaborador</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Cargos" asp-action="Create">Cadastrar Cargo</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Create">Cadastrar Empresa</a>
+                            </div>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cargos" asp-action="Index">Cargos</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="listarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Consultar
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="listarDropdown">
+                                <a class="dropdown-item" asp-area="" asp-controller="Colaboradores" asp-action="Index">Colaboradores</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Cargos" asp-action="Index">Cargos</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Empresas" asp-action="Index">Empresas</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -44,7 +58,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2023 - RhProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2023 - WebRhProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

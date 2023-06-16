@@ -26,12 +26,17 @@ namespace WebRhProject.Models
         public Cargo Cargo { get; set; }
         [ForeignKey(nameof(Cargo))]
         public int CargoId { get; set; }
+
+        public Empresa Empresa { get; set; }
+
+        [ForeignKey(nameof(Empresa))]
+        public int EmpresaId { get; set; }
         public Colaborador()
         {
 
         }
 
-        public Colaborador(int id, string nome, string sobrenome, double salarioBase, DateTime dataNascimento, DateTime dataAdmissao, int dependentes, int filhos, Cargo cargo)
+        public Colaborador(int id, string nome, string sobrenome, double salarioBase, DateTime dataNascimento, DateTime dataAdmissao, int dependentes, int filhos, Cargo cargo, Empresa empresa)
         {
             Id = id;
             Nome = nome;
@@ -42,6 +47,7 @@ namespace WebRhProject.Models
             Dependentes = dependentes;
             Filhos = filhos;
             Cargo = cargo;
+            Empresa = empresa;
         }
     }
 }

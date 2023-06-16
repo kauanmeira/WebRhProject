@@ -7,5 +7,6 @@ namespace WebRhProject.Models.ViewModels
     {
         public Colaborador Colaborador { get; set; }
         public ICollection<Cargo> Cargos { get; set; }
+        public ICollection<Empresa> Empresas { get; set; }
     }
 }

@@ -12,6 +12,7 @@ var services = builder.Services;
 services.AddControllersWithViews();
 services.AddScoped<CargoService>();
 services.AddScoped<ColaboradorService>();
+services.AddScoped<EmpresaService>();
 
 var app = builder.Build();
 
