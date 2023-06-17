@@ -9,9 +9,13 @@ namespace WebRhProject.Models
     public class Colaborador
     {
         public int Id { get; set; }
+
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
         public string Nome { get; set; }
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
         public string Sobrenome { get; set; }
         [Display(Name = "Salário Base")]
+        [Range(100.0, 50000.0, ErrorMessage = "{0} must be from {1} to {2}")]
         public double SalarioBase { get; set; }
         [Display(Name = "Data de Nascimento")]
         [DataType(DataType.Date)]

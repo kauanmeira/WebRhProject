@@ -8,8 +8,12 @@ namespace WebRhProject.Models
     {
         public int Id { get; set; }
         [DataType(DataType.EmailAddress)]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
+
         public string Email {get; set; }
         [DataType(DataType.Password)]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
+
         public string Senha { get; set; }
 
         public Colaborador Colaborador { get; set; }

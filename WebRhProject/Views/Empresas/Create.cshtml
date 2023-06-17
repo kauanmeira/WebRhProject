@@ -1,40 +1,48 @@
-﻿    @model WebRhProject.Models.Empresa
+﻿@model WebRhProject.Models.Empresa
 
-    @{
-        ViewData["Title"] = "Create";
-    }
+@{
+    ViewData["Title"] = "Create";
+}
 
-    <h1>Create</h1>
+<h1>Create</h1>
 
-    <h4>Empresa</h4>
-    <hr />
-    <div class="row">
-        <div class="col-md-4">
-            <form asp-action="Create">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Cnpj" class="control-label"></label>
-                    <input asp-for="Cnpj" class="form-control" />
-                    <span asp-validation-for="Cnpj" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="RazaoSocial" class="control-label"></label>
-                    <input asp-for="RazaoSocial" class="form-control" />
-                    <span asp-validation-for="RazaoSocial" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="NomeFantasia" class="control-label"></label>
-                    <input asp-for="NomeFantasia" class="form-control" />
-                    <span asp-validation-for="NomeFantasia" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
-                </div>
-            </form>
-        </div>
+<h4>Empresa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Cnpj" class="control-label"></label>
+                <input asp-for="Cnpj" id="Cnpj" class="form-control" />
+                <span asp-validation-for="Cnpj" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RazaoSocial" class="control-label"></label>
+                <input asp-for="RazaoSocial" class="form-control" />
+                <span asp-validation-for="RazaoSocial" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NomeFantasia" class="control-label"></label>
+                <input asp-for="NomeFantasia" class="form-control" />
+                <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+            </div>
+        </form>
     </div>
+</div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+<div>
+    <a asp-action="Index">Voltar</a>
+</div>
 
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Cnpj').mask('00.000.000/0000-00', { reverse: true });
+        });
+    </script>
+}
