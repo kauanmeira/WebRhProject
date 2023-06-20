@@ -7,5 +7,7 @@ namespace WebRhProject.Models.ViewModels
     {
         public Usuario Usuario { get; set; }
         public ICollection<Colaborador> Colaboradores { get; set; }
+        public string ConfirmarSenha { get; set; }
+
     }
 }

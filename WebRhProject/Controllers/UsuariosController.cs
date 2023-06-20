@@ -37,7 +37,7 @@ namespace WebRhProject.Controllers
 
         public IActionResult Create()
         {
-            var colaboradores = _colaboradorService.FindAll();
+            var colaboradores = _colaboradorService.FindAllActive();
             var viewModel = new UsuarioFormViewModel { Colaboradores = colaboradores };
             return View(viewModel);
         }
@@ -53,6 +53,14 @@ namespace WebRhProject.Controllers
                 var viewModel = new UsuarioFormViewModel { Usuario = usuario, Colaboradores = colaboradores };
                 return View(viewModel);
             }
+            if (usuario.Senha != usuario.ConfirmarSenha)
+            {
+                ModelState.AddModelError("ConfirmarSenha", "A senha e a confirmação de senha não correspondem");
+                var colaboradores = _colaboradorService.FindAll();
+                var viewModel = new UsuarioFormViewModel { Usuario = usuario, Colaboradores = colaboradores };
+                return View(viewModel);
+            }
+
 
             _usuarioService.Insert(usuario);
             return RedirectToAction(nameof(Index));

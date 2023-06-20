@@ -8,10 +8,10 @@ namespace WebRhProject.Models
     {
         public int Id { get; set; }
         public string Cnpj { get; set; }
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} deve ter entre {2} e {1} caracteres")]
+        [StringLength(40, MinimumLength = 3, ErrorMessage = "{0} deve ter entre {2} e {1} caracteres")]
         [Display(Name = "Razão Social")]
         public string RazaoSocial { get; set; }
-        [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} deve ter entre {2} e {1} caracteres")]
+        [StringLength(40, MinimumLength = 3, ErrorMessage = "{0} deve ter entre {2} e {1} caracteres")]
         [Display(Name = "Nome Fantasia")]
         public string NomeFantasia { get; set; }
 

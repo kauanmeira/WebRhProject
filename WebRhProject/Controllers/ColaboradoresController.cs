@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using WebRhProject.Models;
 using WebRhProject.Models.ViewModels;
 using WebRhProject.Services;
@@ -113,9 +108,9 @@ namespace WebRhProject.Controllers
                 return RedirectToAction(nameof(Error), new { message = "Id not found" });
             }
 
-            List<Cargo> cargos = _cargoService.FindAll();
-            List<Empresa> empresas = _empresaService.FindAll();
-            ColaboradorFormViewModel viewModel = new ColaboradorFormViewModel { Colaborador = obj, Cargos = cargos, Empresas = empresas };
+            var cargos = _cargoService.FindAll();
+            var empresas = _empresaService.FindAll();
+            var viewModel = new ColaboradorFormViewModel { Colaborador = obj, Cargos = cargos, Empresas = empresas };
             return View(viewModel);
         }
 
@@ -127,6 +122,7 @@ namespace WebRhProject.Controllers
             {
                 return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
             }
+
             try
             {
                 _colaboradorService.Update(colaborador);
@@ -147,6 +143,7 @@ namespace WebRhProject.Controllers
             };
             return View(viewModel);
         }
+
         public IActionResult SelectColaborador()
         {
             var viewModel = new DemissaoViewModel
@@ -201,6 +198,5 @@ namespace WebRhProject.Controllers
             _colaboradorService.Demitir(colaboradorId);
             return RedirectToAction(nameof(Index));
         }
-
     }
 }
