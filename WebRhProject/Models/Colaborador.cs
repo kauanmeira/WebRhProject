@@ -16,6 +16,7 @@ namespace WebRhProject.Models
         public string Sobrenome { get; set; }
         [Display(Name = "Salário Base")]
         [Range(100.0, 50000.0, ErrorMessage = "{0} must be from {1} to {2}")]
+        [DisplayFormat(DataFormatString = "R$ {0:#,##0.00}")]
         public double SalarioBase { get; set; }
         [Display(Name = "Data de Nascimento")]
         [DataType(DataType.Date)]
@@ -25,8 +26,9 @@ namespace WebRhProject.Models
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataAdmissao { get; set; }
-        public int Dependentes { get; set; }
-        public int Filhos { get; set; }
+        public DateTime? DataDemissao { get; set; }
+        public int? Dependentes { get; set; }
+        public int? Filhos { get; set; }
         public Cargo Cargo { get; set; }
         [ForeignKey(nameof(Cargo))]
         public int CargoId { get; set; }
@@ -35,6 +37,7 @@ namespace WebRhProject.Models
 
         [ForeignKey(nameof(Empresa))]
         public int EmpresaId { get; set; }
+        public int Status { get; set; } = 1;
         public Colaborador()
         {
 

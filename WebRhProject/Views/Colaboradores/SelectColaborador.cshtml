@@ -1,0 +1,22 @@
+﻿@model WebRhProject.Models.ViewModels.DemissaoViewModel
+
+@{
+    ViewData["Title"] = "Selecione um Colaborador";
+}
+
+<h1>Selecione um Colaborador</h1>
+
+<form asp-action="SelectColaborador" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="ColaboradorId">Colaborador:</label>
+        <select id="ColaboradorId" name="ColaboradorId" class="form-control">
+            <option value="">Selecione um colaborador</option>
+            @foreach (var colaborador in Model.Colaboradores)
+            {
+                <option value="@colaborador.Id">@colaborador.Nome</option>
+            }
+        </select>
+    </div>
+    <input type="submit" value="Selecionar" class="btn btn-primary" />
+</form>

@@ -57,6 +57,13 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Nome")] Cargo cargo)
         {
+            bool nomeExists = await _context.Cargo.AnyAsync(c => c.Nome == cargo.Nome);
+
+            if (nomeExists)
+            {
+                ModelState.AddModelError("Nome", "Já existe um cargo cadastrado com esse nome.");
+                return View(cargo);
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(cargo);
