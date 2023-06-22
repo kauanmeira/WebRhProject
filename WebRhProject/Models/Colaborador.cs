@@ -54,7 +54,17 @@ namespace WebRhProject.Models
         public int EmpresaId { get; set; }
         public bool Ativo { get; set; } = true;
         public Usuario? Usuario { get; set; }
+        public string? Logradouro { get; set; }
+        public string? Bairro { get; set; }
+        public string Numero { get; set; }
+        public string? Cidade { get; set; }
+        public string? Estado { get; set; }
 
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        [Display(Name = "CEP")]
+        [StringLength(9, MinimumLength = 8, ErrorMessage = "{0} deve ter {1} caracteres")]
+        public string CEP { get; set; }
 
         public Colaborador()
         {

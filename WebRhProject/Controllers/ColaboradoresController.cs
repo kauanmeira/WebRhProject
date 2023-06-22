@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using WebRhProject.Models;
 using WebRhProject.Models.ViewModels;
 using WebRhProject.Services;
@@ -35,7 +36,6 @@ namespace WebRhProject.Controllers
             var viewModel = new ColaboradorFormViewModel { Cargos = cargos, Empresas = empresas };
             return View(viewModel);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Colaborador colaborador)
@@ -51,10 +51,28 @@ namespace WebRhProject.Controllers
                 return View(viewModel);
             }
 
+            string cep = colaborador.CEP;
+            string url = $"https://viacep.com.br/ws/{cep}/json/";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = client.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    var addressData = JsonConvert.DeserializeObject<dynamic>(jsonResult);
+
+                    colaborador.Logradouro = addressData.logradouro;
+                    colaborador.Bairro = addressData.bairro;
+                    colaborador.Cidade = addressData.localidade;
+                    colaborador.Estado = addressData.uf;
+                }
+            }
+
             _colaboradorService.Insert(colaborador);
             return RedirectToAction(nameof(Index));
         }
-
+       
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -70,6 +88,7 @@ namespace WebRhProject.Controllers
 
             return View(obj);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)

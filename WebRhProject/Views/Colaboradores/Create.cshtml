@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.SalarioBase" class="control-label"></label>
-                @Html.TextBoxFor(m => m.Colaborador.SalarioBase, "{0:R$ #,##0.00}", new { @class = "form-control" })
+                <input id="salario-base-input" asp-for="Colaborador.SalarioBase" class="form-control" />
                 <span asp-validation-for="Colaborador.SalarioBase" class="text-danger"></span>
             </div>
 
@@ -48,6 +48,37 @@
                 <label asp-for="Colaborador.Filhos" class="control-label"></label>
                 <input asp-for="Colaborador.Filhos" class="form-control" />
                 <span asp-validation-for="Colaborador.Filhos" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Colaborador.CEP" class="control-label"></label>
+                <input type="text" asp-for="Colaborador.CEP" class="form-control" id="cep-input" />
+                <span asp-validation-for="Colaborador.CEP" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Logradouro</label>
+                <input type="text" class="form-control" id="logradouro-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Bairro</label>
+                <input type="text" class="form-control" id="bairro-input" readonly />
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.Numero" class="control-label"></label>
+                <input asp-for="Colaborador.Numero" class="form-control" />
+                <span asp-validation-for="Colaborador.Numero" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Cidade</label>
+                <input type="text" class="form-control" id="cidade-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Estado</label>
+                <input type="text" class="form-control" id="estado-input" readonly />
             </div>
 
             <div class="form-group">
@@ -77,10 +108,51 @@
 
 @section Scripts {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0/dist/autoNumeric.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#Colaborador_SalarioBase').mask('R$ 000.000.000.000.000,00', { reverse: true });
+            // Máscara para o campo de CEP
+            $('#cep-input').mask('00000-000');
+
+            // Lidar com a tecla Enter nos campos de entrada
+            $('input').keydown(function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    var nextInput = $(this).closest('.form-group').next('.form-group').find('input');
+                    if (nextInput.length > 0) {
+                        nextInput.focus();
+                    } else {
+                        $(this).blur();
+                    }
+                }
+            });
+
+            $('#cep-input').blur(function () {
+                var cep = $(this).val().replace(/\D/g, '');
+
+                if (cep) {
+                    var url = 'https://viacep.com.br/ws/' + cep + '/json/';
+
+                    $.getJSON(url, function (data) {
+                        if (!data.erro) {
+                            $('#logradouro-input').val(data.logradouro);
+                            $('#bairro-input').val(data.bairro);
+                            $('#cidade-input').val(data.localidade);
+                            $('#estado-input').val(data.uf);
+                        }
+                    });
+                }
+            });
+
+            // Formatar o campo de salário base
+            var salarioBaseInput = document.getElementById('salario-base-input');
+            new AutoNumeric(salarioBaseInput, {
+                currencySymbol: 'R$ ',
+                decimalPlaces: 2,
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true,
+            });
         });
     </script>
 }
-

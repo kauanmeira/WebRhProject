@@ -17,6 +17,7 @@ services.AddScoped<ColaboradorService>();
 services.AddScoped<EmpresaService>();
 services.AddScoped<UsuarioService>();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebRhProject.Data;
 
@@ -11,9 +12,10 @@ using WebRhProject.Data;
 namespace WebRhProject.Data.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230622190802_API")]
+    partial class API
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,17 +53,19 @@ namespace WebRhProject.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Bairro")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CEP")
                         .IsRequired()
-                        .HasMaxLength(9)
-                        .HasColumnType("nvarchar(9)");
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<int>("CargoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Cidade")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DataAdmissao")
@@ -80,12 +84,14 @@ namespace WebRhProject.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Estado")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Filhos")
                         .HasColumnType("int");
 
                     b.Property<string>("Logradouro")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nome")
