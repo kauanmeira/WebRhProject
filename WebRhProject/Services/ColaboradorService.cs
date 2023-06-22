@@ -25,7 +25,7 @@ namespace WebRhProject.Services
 
         public void Insert(Colaborador obj)
         {
-            obj.Status = 1;
+            obj.Ativo = true;
             _context.Add(obj);
             _context.SaveChanges();
         }
@@ -61,7 +61,7 @@ namespace WebRhProject.Services
         }
         public List<Colaborador> FindAllActive()
         {
-            return _context.Colaborador.Where(c => c.Status == 1).ToList();
+            return _context.Colaborador.Where(c => c.Ativo == true).ToList();
         }
 
         public bool Exists(string nome, string sobrenome)
@@ -74,11 +74,20 @@ namespace WebRhProject.Services
 
             if (colaborador != null)
             {
-                colaborador.Status = 0;
+                colaborador.Ativo = false;
                 colaborador.DataDemissao = DateTime.Now;
 
                 _context.SaveChanges();
             }
         }
+        public bool HasCompanyEmpresa(int colaboradorId)
+        {
+            return _context.Colaborador.Any(c => c.Id == colaboradorId && c.EmpresaId != null);
+        }
+        public bool HasCompanyCargo(int colaboradorId)
+        {
+            return _context.Colaborador.Any(c => c.Id == colaboradorId && c.CargoId != null);
+        }
+
     }
 }

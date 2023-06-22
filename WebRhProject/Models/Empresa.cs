@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebRhProject.Models
@@ -14,6 +15,7 @@ namespace WebRhProject.Models
         [StringLength(40, MinimumLength = 3, ErrorMessage = "{0} deve ter entre {2} e {1} caracteres")]
         [Display(Name = "Nome Fantasia")]
         public string NomeFantasia { get; set; }
+        public List<Colaborador>? Colaboradores { get; set; }
 
         public Empresa()
         {

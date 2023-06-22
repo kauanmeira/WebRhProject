@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebRhProject.Models.Holerite>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Colaborador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Mes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalarioBruto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescInss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DescIrrf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HorasNormais)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SalarioLiquido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dependentes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tipo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Colaborador.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalarioBruto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescInss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DescIrrf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HorasNormais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SalarioLiquido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dependentes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tipo)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,69 @@
+﻿@model WebRhProject.Models.Holerite
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Holerite</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ColaboradorId" class="control-label"></label>
+                <select asp-for="ColaboradorId" class ="form-control" asp-items="ViewBag.ColaboradorId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Mes" class="control-label"></label>
+                <input asp-for="Mes" class="form-control" />
+                <span asp-validation-for="Mes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalarioBruto" class="control-label"></label>
+                <input asp-for="SalarioBruto" class="form-control" />
+                <span asp-validation-for="SalarioBruto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DescInss" class="control-label"></label>
+                <input asp-for="DescInss" class="form-control" />
+                <span asp-validation-for="DescInss" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DescIrrf" class="control-label"></label>
+                <input asp-for="DescIrrf" class="form-control" />
+                <span asp-validation-for="DescIrrf" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HorasNormais" class="control-label"></label>
+                <input asp-for="HorasNormais" class="form-control" />
+                <span asp-validation-for="HorasNormais" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SalarioLiquido" class="control-label"></label>
+                <input asp-for="SalarioLiquido" class="form-control" />
+                <span asp-validation-for="SalarioLiquido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dependentes" class="control-label"></label>
+                <input asp-for="Dependentes" class="form-control" />
+                <span asp-validation-for="Dependentes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label>
+                <input asp-for="Tipo" class="form-control" />
+                <span asp-validation-for="Tipo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

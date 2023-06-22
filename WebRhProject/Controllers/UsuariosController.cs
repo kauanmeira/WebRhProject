@@ -61,6 +61,15 @@ namespace WebRhProject.Controllers
                 return View(viewModel);
             }
 
+            // Verificar se o colaborador já possui um usuário vinculado
+            bool colaboradorHasUsuario = _usuarioService.ExistsByColaboradorId(usuario.ColaboradorId);
+            if (colaboradorHasUsuario)
+            {
+                ModelState.AddModelError(string.Empty, "O colaborador já está vinculado a um usuário.");
+                var colaboradores = _colaboradorService.FindAll();
+                var viewModel = new UsuarioFormViewModel { Usuario = usuario, Colaboradores = colaboradores };
+                return View(viewModel);
+            }
 
             _usuarioService.Insert(usuario);
             return RedirectToAction(nameof(Index));

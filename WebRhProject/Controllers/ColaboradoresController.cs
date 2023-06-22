@@ -70,14 +70,23 @@ namespace WebRhProject.Controllers
 
             return View(obj);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int id)
         {
+            // Verificar se o colaborador está vinculado a uma empresa
+            bool hasCompany = _colaboradorService.HasCompanyEmpresa(id) || _colaboradorService.HasCompanyCargo(id);
+            if (hasCompany)
+            {
+                ModelState.AddModelError(string.Empty, "Não é possível excluir o colaborador porque ele está vinculado a uma empresa e/ou cargo.");
+                var obj = _colaboradorService.FindById(id);
+                return View("Delete", obj);
+            }
+
             _colaboradorService.Remove(id);
             return RedirectToAction(nameof(Index));
         }
+
 
         public IActionResult Details(int? id)
         {

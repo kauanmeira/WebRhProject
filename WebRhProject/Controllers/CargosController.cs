@@ -7,17 +7,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebRhProject.Data;
 using WebRhProject.Models;
+using WebRhProject.Services;
 
 namespace WebRhProject.Controllers
 {
-
     public class CargosController : Controller
     {
         private readonly Contexto _context;
+        private readonly CargoService _cargoService;
 
-        public CargosController(Contexto context)
+        public CargosController(Contexto context, CargoService cargoService)
         {
             _context = context;
+            _cargoService = cargoService;
         }
 
         // GET: Cargos
@@ -123,20 +125,27 @@ namespace WebRhProject.Controllers
             }
             return View(cargo);
         }
-
         // GET: Cargos/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
+            if (id == null || _context.Cargo == null)
             {
                 return NotFound();
             }
 
             var cargo = await _context.Cargo
+                .Include(e => e.Colaboradores)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (cargo == null)
             {
                 return NotFound();
+            }
+
+            if (cargo.Colaboradores.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Não é possível excluir o cargo porque ela possui colaboradores vinculados.");
+                return View(cargo);
             }
 
             return View(cargo);
@@ -147,9 +156,25 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cargo = await _context.Cargo.FindAsync(id);
+            var cargo = await _context.Cargo
+                .Include(e => e.Colaboradores)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (cargo == null)
+            {
+                return NotFound();
+            }
+
+            if (cargo.Colaboradores.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Não é possível excluir o cargo porque ela possui colaboradores vinculados.");
+                ViewData["ShowErrorMessage"] = true;
+                return View("Delete", cargo);
+            }
+
             _context.Cargo.Remove(cargo);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

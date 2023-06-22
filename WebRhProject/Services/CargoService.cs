@@ -21,5 +21,14 @@ namespace WebRhProject.Services
         {
             return _context.Cargo.OrderBy(x => x.Nome).ToList();
         }
+        public Cargo FindById(int id)
+        {
+            return _context.Cargo.Find(id);
+        }
+        public bool HasAnyCollaborators(int cargoId)
+        {
+            return _context.Colaborador.Any(colaborador => colaborador.CargoId == cargoId);
+        }
+
     }
 }

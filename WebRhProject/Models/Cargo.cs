@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebRhProject.Models
 {
@@ -8,20 +9,18 @@ namespace WebRhProject.Models
         public int Id { get; set; }
         public string Nome { get; set; }
 
+        public ICollection<Colaborador>? Colaboradores { get; set; }
+
         public Cargo()
         {
-
+            Colaboradores = new List<Colaborador>();
         }
 
         public Cargo(int id, string nome)
         {
             Id = id;
             Nome = nome;
-        }
-
-        public static implicit operator Cargo(List<Cargo> v)
-        {
-            throw new NotImplementedException();
+            Colaboradores = new List<Colaborador>();
         }
     }
 }

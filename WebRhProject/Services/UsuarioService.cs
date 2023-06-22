@@ -61,5 +61,9 @@ public class UsuarioService
     {
         return _context.Usuario.FirstOrDefault(u => u.Email == email && u.Senha == senha);
     }
+    public bool ExistsByColaboradorId(int colaboradorId)
+    {
+        return _context.Usuario.Any(u => u.ColaboradorId == colaboradorId);
+    }
 
 }

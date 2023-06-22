@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebRhProject.Data;
 
@@ -11,9 +12,10 @@ using WebRhProject.Data;
 namespace WebRhProject.Data.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230621224248_Colaborador-booleano")]
+    partial class Colaboradorbooleano
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -183,9 +185,6 @@ namespace WebRhProject.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ColaboradorId");
@@ -202,7 +201,7 @@ namespace WebRhProject.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WebRhProject.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("Colaboradores")
                         .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -232,6 +231,11 @@ namespace WebRhProject.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Colaborador");
+                });
+
+            modelBuilder.Entity("WebRhProject.Models.Empresa", b =>
+                {
+                    b.Navigation("Colaboradores");
                 });
 #pragma warning restore 612, 618
         }

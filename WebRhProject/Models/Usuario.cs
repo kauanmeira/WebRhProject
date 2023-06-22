@@ -25,7 +25,9 @@ namespace WebRhProject.Models
         public string ConfirmarSenha { get; set; }
 
         public Colaborador Colaborador { get; set; }
+        [ForeignKey(nameof(Colaborador))]
         public int ColaboradorId { get; set; }
+
 
         public Usuario()
         {

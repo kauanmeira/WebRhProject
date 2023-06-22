@@ -27,5 +27,14 @@ namespace WebRhProject.Services
         {
             return _context.Empresa.OrderBy(x => x.NomeFantasia).ToList();
         }
+        public Empresa FindById(int id)
+        {
+            return _context.Empresa.Find(id);
+        }
+        public bool HasCompany(int empresaId)
+        {
+            return _context.Colaborador.Any(c => c.EmpresaId == empresaId);
+        }
+
     }
 }

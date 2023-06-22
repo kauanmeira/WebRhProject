@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebRhProject.Data;
-using WebRhProject.Data.Migrations;
 using WebRhProject.Models;
 using WebRhProject.Services;
 
@@ -56,10 +55,6 @@ namespace WebRhProject.Controllers
         }
 
         // POST: Empresas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        // POST: Empresas/Create
-        // POST: Empresas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Cnpj,RazaoSocial,NomeFantasia")] Empresa empresa)
@@ -68,23 +63,26 @@ namespace WebRhProject.Controllers
 
             if (cnpjExists)
             {
-                ModelState.AddModelError("Cnpj", "Já existe uma empresa cadastrada com esse cnpj.");
+                ModelState.AddModelError("Cnpj", "Já existe uma empresa cadastrada com esse CNPJ.");
                 return View(empresa);
             }
+
             bool razaoExists = await _context.Empresa.AnyAsync(u => u.RazaoSocial == empresa.RazaoSocial);
 
             if (razaoExists)
             {
-                ModelState.AddModelError("Razão Social", "Já existe uma empresa cadastrada com essa razão social");
+                ModelState.AddModelError("RazaoSocial", "Já existe uma empresa cadastrada com essa razão social.");
                 return View(empresa);
             }
+
             bool nomeExists = await _context.Empresa.AnyAsync(u => u.NomeFantasia == empresa.NomeFantasia);
 
             if (nomeExists)
             {
-                ModelState.AddModelError("Nome Fantasia", "Já existe uma empresa cadastrada com esse nome fantasia");
+                ModelState.AddModelError("NomeFantasia", "Já existe uma empresa cadastrada com esse nome fantasia.");
                 return View(empresa);
             }
+
             if (ModelState.IsValid)
             {
                 _context.Empresa.Add(empresa);
@@ -92,17 +90,8 @@ namespace WebRhProject.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Se houver erros de validação, exiba as mensagens de erro
-            var errors = ModelState.Values.SelectMany(v => v.Errors);
-            foreach (var error in errors)
-            {
-                ModelState.AddModelError(string.Empty, error.ErrorMessage);
-            }
-
             return View(empresa);
         }
-
-
 
         // GET: Empresas/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -121,8 +110,6 @@ namespace WebRhProject.Controllers
         }
 
         // POST: Empresas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Cnpj,RazaoSocial,NomeFantasia")] Empresa empresa)
@@ -164,10 +151,18 @@ namespace WebRhProject.Controllers
             }
 
             var empresa = await _context.Empresa
+                .Include(e => e.Colaboradores)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (empresa == null)
             {
                 return NotFound();
+            }
+
+            if (empresa.Colaboradores.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Não é possível excluir a empresa porque ela possui colaboradores vinculados.");
+                return View(empresa);
             }
 
             return View(empresa);
@@ -178,17 +173,25 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Empresa == null)
+            var empresa = await _context.Empresa
+                .Include(e => e.Colaboradores)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (empresa == null)
             {
-                return Problem("Entity set 'Contexto.Empresa'  is null.");
-            }
-            var empresa = await _context.Empresa.FindAsync(id);
-            if (empresa != null)
-            {
-                _context.Empresa.Remove(empresa);
+                return NotFound();
             }
 
+            if (empresa.Colaboradores.Count > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Não é possível excluir a empresa porque ela possui colaboradores vinculados.");
+                ViewData["ShowErrorMessage"] = true;
+                return View("Delete", empresa);
+            }
+
+            _context.Empresa.Remove(empresa);
             await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 

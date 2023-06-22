@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebRhProject.Data;
 
@@ -11,9 +12,10 @@ using WebRhProject.Data;
 namespace WebRhProject.Data.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230620182724_colaboradores-required")]
+    partial class colaboradoresrequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -46,9 +48,6 @@ namespace WebRhProject.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<bool>("Ativo")
-                        .HasColumnType("bit");
 
                     b.Property<int>("CargoId")
                         .HasColumnType("int");
@@ -83,6 +82,9 @@ namespace WebRhProject.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -183,9 +185,6 @@ namespace WebRhProject.Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("Tipo")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ColaboradorId");
@@ -202,7 +201,7 @@ namespace WebRhProject.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("WebRhProject.Models.Empresa", "Empresa")
-                        .WithMany()
+                        .WithMany("Colaboradores")
                         .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -232,6 +231,11 @@ namespace WebRhProject.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Colaborador");
+                });
+
+            modelBuilder.Entity("WebRhProject.Models.Empresa", b =>
+                {
+                    b.Navigation("Colaboradores");
                 });
 #pragma warning restore 612, 618
         }
