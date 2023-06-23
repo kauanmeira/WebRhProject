@@ -35,6 +35,11 @@ namespace WebRhProject.Services
         {
             return _context.Colaborador.Any(c => c.EmpresaId == empresaId);
         }
+        public void Insert(Empresa obj)
+        {
+            _context.Add(obj);
+            _context.SaveChanges();
+        }
 
     }
 }

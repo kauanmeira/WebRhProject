@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using WebRhProject.Data;
 using WebRhProject.Models;
 using WebRhProject.Services;
+using System.Net.Http;
 
 namespace WebRhProject.Controllers
 {
@@ -86,6 +88,8 @@ namespace WebRhProject.Controllers
             if (ModelState.IsValid)
             {
                 _context.Empresa.Add(empresa);
+                await ObterInformacoesEndereco(empresa);
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -199,5 +203,26 @@ namespace WebRhProject.Controllers
         {
             return (_context.Empresa?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        private async Task ObterInformacoesEndereco(Empresa empresa)
+        {
+            string cep = empresa.CEP;
+            string url = $"https://viacep.com.br/ws/{cep}/json/";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResult = await response.Content.ReadAsStringAsync();
+                    dynamic addressData = JsonConvert.DeserializeObject(jsonResult);
+
+                    empresa.Logradouro = addressData.logradouro;
+                    empresa.Bairro = addressData.bairro;
+                    empresa.Cidade = addressData.localidade;
+                    empresa.Estado = addressData.uf;
+                }
+            }
+        }
+
     }
 }
