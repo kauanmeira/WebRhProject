@@ -1,69 +1,131 @@
-﻿@model WebRhProject.Models.Holerite
+﻿@model WebRhProject.Models.ViewModels.HoleriteFormViewModel
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="text-center">Lançamento de Holerite</h1>
 
-<h4>Holerite</h4>
 <hr />
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="ColaboradorId" class="control-label"></label>
-                <select asp-for="ColaboradorId" class ="form-control" asp-items="ViewBag.ColaboradorId"></select>
+                <label asp-for="Holerite.ColaboradorId" class="control-label">Colaborador</label>
+                <select asp-for="Holerite.ColaboradorId" asp-items="@(new SelectList(Model.Colaboradores, "Id", "NomeCPF"))" class="form-control input-field">
+                    <option value="">Selecione um colaborador</option>
+                </select>
+                <span asp-validation-for="Holerite.ColaboradorId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Mes" class="control-label"></label>
-                <input asp-for="Mes" class="form-control" />
-                <span asp-validation-for="Mes" class="text-danger"></span>
+                <label asp-for="Holerite.MesAno" class="control-label">Mês/Ano</label>
+                <input asp-for="Holerite.MesAno" class="form-control input-field" />
+                <span asp-validation-for="Holerite.MesAno" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalarioBruto" class="control-label"></label>
-                <input asp-for="SalarioBruto" class="form-control" />
-                <span asp-validation-for="SalarioBruto" class="text-danger"></span>
+                <label asp-for="Holerite.SalarioBruto" class="control-label">Salário Bruto</label>
+                <input asp-for="Holerite.SalarioBruto" class="form-control input-field-decimal" readonly />
+                <span asp-validation-for="Holerite.SalarioBruto" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DescInss" class="control-label"></label>
-                <input asp-for="DescInss" class="form-control" />
-                <span asp-validation-for="DescInss" class="text-danger"></span>
+                <label asp-for="Holerite.HorasNormais" class="control-label">Horas Normais</label>
+                <input asp-for="Holerite.HorasNormais" class="form-control input-field-decimal" />
+                <span asp-validation-for="Holerite.HorasNormais" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="DescIrrf" class="control-label"></label>
-                <input asp-for="DescIrrf" class="form-control" />
-                <span asp-validation-for="DescIrrf" class="text-danger"></span>
+                <label asp-for="Holerite.DependentesHolerite" class="control-label">Dependentes</label>
+                <input asp-for="Holerite.DependentesHolerite" id="DependentesHolerite" class="form-control input-field-decimal" readonly />
+                <span asp-validation-for="Holerite.DependentesHolerite" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HorasNormais" class="control-label"></label>
-                <input asp-for="HorasNormais" class="form-control" />
-                <span asp-validation-for="HorasNormais" class="text-danger"></span>
+                <label asp-for="Holerite.Tipo" class="control-label">Tipo</label>
+                <input asp-for="Holerite.Tipo" class="form-control" />
+                <span asp-validation-for="Holerite.Tipo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SalarioLiquido" class="control-label"></label>
-                <input asp-for="SalarioLiquido" class="form-control" />
-                <span asp-validation-for="SalarioLiquido" class="text-danger"></span>
+                <label asp-for="Holerite.DescontoINSS" class="control-label">Desconto INSS</label>
+                <input asp-for="Holerite.DescontoINSS" class="form-control input-field-decimal" readonly />
+                <span asp-validation-for="Holerite.DescontoINSS" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Dependentes" class="control-label"></label>
-                <input asp-for="Dependentes" class="form-control" />
-                <span asp-validation-for="Dependentes" class="text-danger"></span>
+                <label asp-for="Holerite.DescontoIRRF" class="control-label">Desconto IRRF</label>
+                <input asp-for="Holerite.DescontoIRRF" class="form-control input-field-decimal" readonly />
+                <span asp-validation-for="Holerite.DescontoIRRF" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Tipo" class="control-label"></label>
-                <input asp-for="Tipo" class="form-control" />
-                <span asp-validation-for="Tipo" class="text-danger"></span>
+                <label asp-for="Holerite.SalarioLiquido" class="control-label">Salário Líquido</label>
+                <input asp-for="Holerite.SalarioLiquido" class="form-control input-field-decimal" readonly />
+                <span asp-validation-for="Holerite.SalarioLiquido" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+
+            <div class="form-group text-center">
+                <input type="submit" value="Salvar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
+<div class="text-center">
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(function () {
+            // Event handler for select change
+            $('#Holerite_ColaboradorId').change(function () {
+                var selectedColaboradorId = $(this).val();
+                if (selectedColaboradorId) {
+                    // AJAX request to get the salario base, descontos, and dependentes
+                    $.ajax({
+                        url: '/Holerites/GetSalarioBaseAndDescontos',
+                        data: { colaboradorId: selectedColaboradorId },
+                        method: 'GET',
+                        success: function (result) {
+                            $('#Holerite_SalarioBruto').val(result.salarioBase.toFixed(2));
+                            $('#Holerite_DescontoINSS').val(result.descontoINSS.toFixed(2));
+                            $('#Holerite_DescontoIRRF').val(result.descontoIRRF.toFixed(2));
+                            $('#Holerite_SalarioLiquido').val(result.salarioLiquido.toFixed(2));
+                        },
+                        error: function () {
+                            alert('Failed to retrieve the salario base and descontos.');
+                        }
+                    });
+
+                    // AJAX request to get the dependentes
+                    $.ajax({
+                        url: '/Holerites/GetDependentes',
+                        data: { colaboradorId: selectedColaboradorId },
+                        method: 'GET',
+                        success: function (result) {
+                            $('#DependentesHolerite').val(result);
+                        },
+                        error: function () {
+                            alert('Failed to retrieve the dependentes.');
+                        }
+                    });
+                } else {
+                    $('#Holerite_SalarioBruto').val('');
+                    $('#Holerite_DescontoINSS').val('');
+                    $('#Holerite_DescontoIRRF').val('');
+                    $('#Holerite_SalarioLiquido').val('');
+                    $('#DependentesHolerite').val('');
+                }
+            });
+
+            // Event handler for input change
+            $('.input-field-decimal').change(function () {
+                var value = parseFloat($(this).val());
+                if (!isNaN(value)) {
+                    $(this).val(value.toFixed(2));
+                }
+            });
+        });
+    </script>
+}

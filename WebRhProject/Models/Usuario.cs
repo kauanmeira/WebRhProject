@@ -28,7 +28,6 @@ namespace WebRhProject.Models
         [ForeignKey(nameof(Colaborador))]
         public int ColaboradorId { get; set; }
 
-
         public Usuario()
         {
         }

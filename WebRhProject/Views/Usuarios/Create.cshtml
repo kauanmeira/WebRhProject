@@ -4,45 +4,68 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Cadastro</h1>
+<h1 class="text-center">Cadastro de Usuário</h1>
 
-<h4>Usuario</h4>
 <hr />
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div asp-validation-summary="All" class="text-danger"></div> 
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Usuario.Email" class="control-label"></label>
-                <input asp-for="Usuario.Email" class="form-control" />
+                <input asp-for="Usuario.Email" class="form-control input-field" />
                 <span asp-validation-for="Usuario.Email" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Usuario.Senha" class="control-label"></label>
-                <input asp-for="Usuario.Senha" class="form-control" />
+                <input asp-for="Usuario.Senha" class="form-control input-field" />
                 <span asp-validation-for="Usuario.Senha" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="Usuario.ConfirmarSenha" class="control-label"></label>
-                <input asp-for="Usuario.ConfirmarSenha" class="form-control" />
+                <input asp-for="Usuario.ConfirmarSenha" class="form-control input-field" />
                 <span asp-validation-for="Usuario.ConfirmarSenha" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Usuario.ColaboradorId" class="control-label">Colaborador</label>
-                <select asp-for="Usuario.ColaboradorId" asp-items="@(new SelectList(Model.Colaboradores,"Id","Nome","Sobrenome"))" class="form-control">
+                <select asp-for="Usuario.ColaboradorId" asp-items="@(new SelectList(Model.Colaboradores, "Id", "NomeCPF"))" class="form-control input-field">
                     <option value="">Selecione um colaborador</option>
                 </select>
                 <span asp-validation-for="Usuario.ColaboradorId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger" role="alert">
+                    Ocorreram erros no formulário:
+                    <ul>
+                        @foreach (var key in ViewData.ModelState.Keys)
+                        {
+                            if (key == "Usuario.Email" && ViewData.ModelState.ContainsKey("Email"))
+                            {
+                                <li>@ViewData.ModelState["Email"].Errors.FirstOrDefault()?.ErrorMessage</li>
+                            }
+                            else if (key == "Usuario.ConfirmarSenha" && ViewData.ModelState.ContainsKey("ConfirmarSenha"))
+                            {
+                                <li>@ViewData.ModelState["ConfirmarSenha"].Errors.FirstOrDefault()?.ErrorMessage</li>
+                            }
+                        }
+                    </ul>
+                </div>
+            }
+
+            <div class="form-group text-center">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
+<div class="text-center">
     <a asp-action="Index">Back to List</a>
 </div>

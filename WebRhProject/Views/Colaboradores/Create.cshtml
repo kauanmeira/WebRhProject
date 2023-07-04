@@ -1,158 +1,201 @@
-﻿@model WebRhProject.Models.ViewModels.ColaboradorFormViewModel
+﻿    @model WebRhProject.Models.ViewModels.ColaboradorFormViewModel
 
-@{
-    ViewData["Title"] = "Create";
-}
+    @{
+        ViewData["Title"] = "Create";
+    }
 
-<h1>Cadastro</h1>
+    <h1 class="text-center">Cadastro de Colaborador</h1>
 
-<h4>Colaborador</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Colaborador.Nome" class="control-label"></label>
-                <input asp-for="Colaborador.Nome" class="form-control" />
-                <span asp-validation-for="Colaborador.Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.Sobrenome" class="control-label"></label>
-                <input asp-for="Colaborador.Sobrenome" class="form-control" />
-                <span asp-validation-for="Colaborador.Sobrenome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.SalarioBase" class="control-label"></label>
-                <input id="salario-base-input" asp-for="Colaborador.SalarioBase" class="form-control" />
-                <span asp-validation-for="Colaborador.SalarioBase" class="text-danger"></span>
-            </div>
+    <hr />
 
-            <div class="form-group">
-                <label asp-for="Colaborador.DataNascimento" class="control-label"></label>
-                <input asp-for="Colaborador.DataNascimento" class="form-control" />
-                <span asp-validation-for="Colaborador.DataNascimento" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.DataAdmissao" class="control-label"></label>
-                <input asp-for="Colaborador.DataAdmissao" class="form-control" />
-                <span asp-validation-for="Colaborador.DataAdmissao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.Dependentes" class="control-label"></label>
-                <input asp-for="Colaborador.Dependentes" class="form-control" />
-                <span asp-validation-for="Colaborador.Dependentes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.Filhos" class="control-label"></label>
-                <input asp-for="Colaborador.Filhos" class="form-control" />
-                <span asp-validation-for="Colaborador.Filhos" class="text-danger"></span>
-            </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <form asp-action="Create" class="colaborador-form">
+                    <div asp-validation-summary="All" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Colaborador.CEP" class="control-label"></label>
-                <input type="text" asp-for="Colaborador.CEP" class="form-control" id="cep-input" />
-                <span asp-validation-for="Colaborador.CEP" class="text-danger"></span>
-            </div>
+                    <section id="section-dados-pessoais">
+                        <h3 class="form-section-title">Dados Pessoais</h3>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.CPF" class="control-label"></label>
+                            <input asp-for="Colaborador.CPF" class="form-control input-field cpf-input" />
+                            <span asp-validation-for="Colaborador.CPF" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <label class="control-label">Logradouro</label>
-                <input type="text" class="form-control" id="logradouro-input" readonly />
-            </div>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.Nome" class="control-labeld">Nome</label>
+                            <input asp-for="Colaborador.Nome" class="form-control  input-field" />
+                            <span asp-validation-for="Colaborador.Nome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.Sobrenome" class="control-label">Sobrenome</label>
+                            <input asp-for="Colaborador.Sobrenome" class="form-control  input-field" />
+                            <span asp-validation-for="Colaborador.Sobrenome" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.SalarioBase" class="control-label">Salário Base</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text currency-symbol">R$</span>
+                                </div>
+                                <input id="salario-base-input" asp-for="Colaborador.SalarioBase" class="form-control input-field" />
+                            </div>
+                            <span asp-validation-for="Colaborador.SalarioBase" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <label class="control-label">Bairro</label>
-                <input type="text" class="form-control" id="bairro-input" readonly />
-            </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.Numero" class="control-label"></label>
-                <input asp-for="Colaborador.Numero" class="form-control" />
-                <span asp-validation-for="Colaborador.Numero" class="text-danger"></span>
-            </div>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.DataNascimento" class="control-label">Data de Nascimento</label>
+                            <input asp-for="Colaborador.DataNascimento" class="form-control  input-field" />
+                            <span asp-validation-for="Colaborador.DataNascimento" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <label class="control-label">Cidade</label>
-                <input type="text" class="form-control" id="cidade-input" readonly />
-            </div>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.DataAdmissao" class="control-label">Data de Admissão</label>
+                            <input asp-for="Colaborador.DataAdmissao" class="form-control  input-field" />
+                            <span asp-validation-for="Colaborador.DataAdmissao" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <label class="control-label">Estado</label>
-                <input type="text" class="form-control" id="estado-input" readonly />
-            </div>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.Dependentes" class="control-label">Dependentes</label>
+                            <input asp-for="Colaborador.Dependentes" class="form-control  input-field" />
+                            <span asp-validation-for="Colaborador.Dependentes" class="text-danger"></span>
+                        </div>
 
-            <div class="form-group">
-                <label asp-for="Colaborador.CargoId" class="control-label">Cargo</label>
-                <select asp-for="Colaborador.CargoId" asp-items="@(new SelectList(Model.Cargos,"Id","Nome"))" class="form-control">
-                    <option value="">Selecione um cargo</option>
-                </select>
-                <span asp-validation-for="Colaborador.CargoId" class="text-danger"></span>
+                        <div class="form-group">
+                            <label asp-for="Colaborador.Filhos" class="control-label">Número de Filhos</label>
+                            <input asp-for="Colaborador.Filhos" class="form-controlead  input-field" />
+                            <span asp-validation-for="Colaborador.Filhos" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="button" class="btn btn-primary" id="btn-proximo-dados-pessoais">Próximo</button>
+                        </div>
+                    </section>
+
+                    <section id="section-outros-dados" style="display: none;">
+                        <h3 class="form-section-title">Endereço</h3>
+
+                        <div class="form-group">
+                            <label asp-for="Colaborador.CEP" class="control-label">CEP</label>
+                            <input type="text" asp-for="Colaborador.CEP" class="form-control  input-field" id="cep-input" />
+                            <span asp-validation-for="Colaborador.CEP" class="text-danger"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label class="control-label">Logradouro</label>
+                            <input type="text" class="form-control  input-field" id="logradouro-input" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Bairro</label>
+                            <input type="text" class="form-control  input-field" id="bairro-input" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Colaborador.Numero" class="control-label">Número</label>
+                            <input asp-for="Colaborador.Numero" class="form-control  input-field" />
+                            <span asp-validation-for="Colaborador.Numero" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Cidade</label>
+                            <input type="text" class="form-control  input-field" id="cidade-input" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label">Estado</label>
+                            <input type="text" class="form-control  input-field" id="estado-input" readonly />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Colaborador.CargoId" class="control-label">Cargo</label>
+                            <select asp-for="Colaborador.CargoId" asp-items="@(new SelectList(Model.Cargos,"Id","Nome"))" class="form-control  input-field">
+                                <option value="">Selecione um cargo</option>
+                            </select>
+                            <span asp-validation-for="Colaborador.CargoId" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Colaborador.EmpresaId" class="control-label">Empresa</label>
+                            <select asp-for="Colaborador.EmpresaId" asp-items="@(new SelectList(Model.Empresas,"Id","NomeFantasia"))" class="form-control  input-field">
+                                <option value="">Selecione uma empresa</option>
+                            </select>
+                            <span asp-validation-for="Colaborador.EmpresaId" class="text-danger"></span>
+                        </div>
+    <div class="form-group">
+                            <input type="submit" value="Salvar" class="btn btn-primary" />
+                        </div>
+                    </section>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6 offset-md-3 text-center">
+                            <button type="button" class="btn btn-secondary" id="btn-voltar-dados-pessoais">Voltar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Colaborador.EmpresaId" class="control-label">Empresa</label>
-                <select asp-for="Colaborador.EmpresaId" asp-items="@(new SelectList(Model.Empresas,"Id","NomeFantasia"))" class="form-control">
-                    <option value="">Selecione uma empresa</option>
-                </select>
-                <span asp-validation-for="Colaborador.EmpresaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Salvar" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Voltar</a>
-</div>
-
-@section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0/dist/autoNumeric.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            // Máscara para o campo de CEP
-            $('#cep-input').mask('00000-000');
-
-            // Lidar com a tecla Enter nos campos de entrada
-            $('input').keydown(function (event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    var nextInput = $(this).closest('.form-group').next('.form-group').find('input');
-                    if (nextInput.length > 0) {
-                        nextInput.focus();
-                    } else {
-                        $(this).blur();
-                    }
-                }
-            });
-
-            $('#cep-input').blur(function () {
-                var cep = $(this).val().replace(/\D/g, '');
-
-                if (cep) {
-                    var url = 'https://viacep.com.br/ws/' + cep + '/json/';
-
-                    $.getJSON(url, function (data) {
-                        if (!data.erro) {
-                            $('#logradouro-input').val(data.logradouro);
-                            $('#bairro-input').val(data.bairro);
-                            $('#cidade-input').val(data.localidade);
-                            $('#estado-input').val(data.uf);
+    @section Scripts {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0/dist/autoNumeric.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Máscara para o campo de CEP
+                $('#cep-input').mask('00000-000');
+                $('.cpf-input').mask('000.000.000-00');
+                // Lidar com a tecla Enter nos campos de entrada
+                $('input').keydown(function (event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault();
+                        var nextInput = $(this).closest('.form-group').next('.form-group').find('input');
+                        if (nextInput.length > 0) {
+                            nextInput.focus();
+                        } else {
+                            $(this).blur();
                         }
-                    });
-                }
-            });
+                    }
+                });
 
-            // Formatar o campo de salário base
-            var salarioBaseInput = document.getElementById('salario-base-input');
-            new AutoNumeric(salarioBaseInput, {
-                currencySymbol: 'R$ ',
-                decimalPlaces: 2,
-                decimalCharacter: ',',
-                digitGroupSeparator: '.',
-                unformatOnSubmit: true,
+                $('#cep-input').blur(function () {
+                    var cep = $(this).val().replace(/\D/g, '');
+
+                    if (cep) {
+                        var url = 'https://viacep.com.br/ws/' + cep + '/json/';
+
+                        $.getJSON(url, function (data) {
+                            if (!data.erro) {
+                                $('#logradouro-input').val(data.logradouro);
+                                $('#bairro-input').val(data.bairro);
+                                $('#cidade-input').val(data.localidade);
+                                $('#estado-input').val(data.uf);
+                            }
+                        });
+                    }
+                });
+
+                // Formatar o campo de salário base
+                var salarioBaseInput = document.getElementById('salario-base-input');
+                new AutoNumeric(salarioBaseInput, {
+                    currencySymbol: 'R$ ',
+                    decimalPlaces: 2,
+                    decimalCharacter: ',',
+                    digitGroupSeparator: '.',
+                    unformatOnSubmit: true,
+                });
+
+                // Mostrar/ocultar seções ao clicar nos botões
+                $('#btn-proximo-dados-pessoais').click(function () {
+                    $('#section-dados-pessoais').hide();
+                    $('#section-outros-dados').show();
+                });
+
+                $('#btn-voltar-dados-pessoais').click(function () {
+                    $('#section-outros-dados').hide();
+                    $('#section-dados-pessoais').show();
+                });
             });
-        });
-    </script>
-}
+        </script>
+    }

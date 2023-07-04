@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebRhProject.Data;
 
@@ -11,9 +12,10 @@ using WebRhProject.Data;
 namespace WebRhProject.Data.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230627120504_ForgotPassword")]
+    partial class ForgotPassword
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,11 +59,6 @@ namespace WebRhProject.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(9)
                         .HasColumnType("nvarchar(9)");
-
-                    b.Property<string>("CPF")
-                        .IsRequired()
-                        .HasMaxLength(14)
-                        .HasColumnType("nvarchar(14)");
 
                     b.Property<int>("CargoId")
                         .HasColumnType("int");
@@ -138,8 +135,7 @@ namespace WebRhProject.Data.Migrations
 
                     b.Property<string>("Cnpj")
                         .IsRequired()
-                        .HasMaxLength(18)
-                        .HasColumnType("nvarchar(18)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Estado")
                         .HasColumnType("nvarchar(max)");
@@ -176,19 +172,19 @@ namespace WebRhProject.Data.Migrations
                     b.Property<int>("ColaboradorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DependentesHolerite")
+                    b.Property<int>("Dependentes")
                         .HasColumnType("int");
 
-                    b.Property<double>("DescontoINSS")
+                    b.Property<double>("DescInss")
                         .HasColumnType("float");
 
-                    b.Property<double>("DescontoIRRF")
+                    b.Property<double>("DescIrrf")
                         .HasColumnType("float");
 
                     b.Property<double>("HorasNormais")
                         .HasColumnType("float");
 
-                    b.Property<int>("MesAno")
+                    b.Property<int>("Mes")
                         .HasColumnType("int");
 
                     b.Property<double>("SalarioBruto")
@@ -197,7 +193,7 @@ namespace WebRhProject.Data.Migrations
                     b.Property<double>("SalarioLiquido")
                         .HasColumnType("float");
 
-                    b.Property<int?>("Tipo")
+                    b.Property<int>("Tipo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -223,10 +219,21 @@ namespace WebRhProject.Data.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<string>("ResetPasswordToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ResetPasswordTokenExpiration")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Senha")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("TokenRedefinicaoSenha")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -64,9 +64,9 @@ namespace WebRhProject.Services
             return _context.Colaborador.Where(c => c.Ativo == true).ToList();
         }
 
-        public bool Exists(string nome, string sobrenome)
+        public bool Exists(string cpf)
         {
-            return _context.Colaborador.Any(c => c.Nome == nome && c.Sobrenome == sobrenome);
+            return _context.Colaborador.Any(c => c.CPF == cpf );
         }
         public void Demitir(int id)
         {

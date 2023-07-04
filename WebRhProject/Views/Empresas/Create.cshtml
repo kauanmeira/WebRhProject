@@ -4,32 +4,31 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1 class="text-center">Cadastro de Empresa</h1>
 
-<h4>Empresa</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 offset-md-3">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Cnpj" class="control-label"></label>
-                <input asp-for="Cnpj" id="Cnpj" class="form-control" />
+                <input asp-for="Cnpj" id="Cnpj" class="form-control input-field" />
                 <span asp-validation-for="Cnpj" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="RazaoSocial" class="control-label"></label>
-                <input asp-for="RazaoSocial" class="form-control" />
+                <input asp-for="RazaoSocial" class="form-control input-field" />
                 <span asp-validation-for="RazaoSocial" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NomeFantasia" class="control-label"></label>
-                <input asp-for="NomeFantasia" class="form-control" />
+                <input asp-for="NomeFantasia" class="form-control input-field" />
                 <span asp-validation-for="NomeFantasia" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="CEP" class="control-label"></label>
-                <input type="text" asp-for="CEP" class="form-control" id="cep-input" />
+                <input type="text" asp-for="CEP" class="form-control input-field" id="cep-input" />
                 <span asp-validation-for="CEP" class="text-danger"></span>
             </div>
 
@@ -40,22 +39,22 @@
 
             <div class="form-group">
                 <label class="control-label">Bairro</label>
-                <input type="text" class="form-control" id="bairro-input" readonly />
+                <input type="text" class="form-control input-field" id="bairro-input" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" />
+                <input asp-for="Numero" class="form-control input-field" />
                 <span asp-validation-for="Numero" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label class="control-label">Cidade</label>
-                <input type="text" class="form-control" id="cidade-input" readonly />
+                <input type="text" class="form-control input-field" id="cidade-input" readonly />
             </div>
 
             <div class="form-group">
                 <label class="control-label">Estado</label>
-                <input type="text" class="form-control" id="estado-input" readonly />
+                <input type="text" class="form-control input-field" id="estado-input" readonly />
             </div>
             <div class="form-group">
                 <input type="submit" value="Salvar" class="btn btn-primary" />

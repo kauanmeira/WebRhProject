@@ -10,13 +10,14 @@
     @Html.AntiForgeryToken()
     <div class="form-group">
         <label for="ColaboradorId">Colaborador:</label>
-        <select id="ColaboradorId" name="ColaboradorId" class="form-control">
+        <select id="ColaboradorId" name="ColaboradorId" class="form-control input-field">
             <option value="">Selecione um colaborador</option>
             @foreach (var colaborador in Model.Colaboradores)
             {
-                <option value="@colaborador.Id">@colaborador.Nome</option>
+                <option value="@colaborador.Id">@colaborador.NomeCPF</option>
             }
         </select>
+
     </div>
     <input type="submit" value="Selecionar" class="btn btn-primary" />
 </form>

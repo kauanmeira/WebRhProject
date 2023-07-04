@@ -2,31 +2,33 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using MimeKit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using WebRhProject.Data;
 using WebRhProject.Models;
 using WebRhProject.Models.ViewModels;
 using WebRhProject.Services;
 using WebRhProject.Services.Exceptions;
+using MailKit.Security;
+using System.Net;
 
 namespace WebRhProject.Controllers
-
 {
     public class UsuariosController : Controller
     {
         private readonly UsuarioService _usuarioService;
         private readonly ColaboradorService _colaboradorService;
-        private readonly Contexto _context;
-
 
         public UsuariosController(UsuarioService usuarioService, ColaboradorService colaboradorService)
         {
             _usuarioService = usuarioService;
             _colaboradorService = colaboradorService;
-           
         }
 
         public IActionResult Index()
@@ -38,7 +40,11 @@ namespace WebRhProject.Controllers
         public IActionResult Create()
         {
             var colaboradores = _colaboradorService.FindAllActive();
-            var viewModel = new UsuarioFormViewModel { Colaboradores = colaboradores };
+            var viewModel = new UsuarioFormViewModel
+            {
+                Colaboradores = colaboradores ?? new List<Colaborador>()
+            };
+
             return View(viewModel);
         }
 
@@ -53,6 +59,7 @@ namespace WebRhProject.Controllers
                 var viewModel = new UsuarioFormViewModel { Usuario = usuario, Colaboradores = colaboradores };
                 return View(viewModel);
             }
+
             if (usuario.Senha != usuario.ConfirmarSenha)
             {
                 ModelState.AddModelError("ConfirmarSenha", "A senha e a confirmação de senha não correspondem");
@@ -74,7 +81,6 @@ namespace WebRhProject.Controllers
             _usuarioService.Insert(usuario);
             return RedirectToAction(nameof(Index));
         }
-
 
         public IActionResult Delete(int? id)
         {
@@ -153,15 +159,6 @@ namespace WebRhProject.Controllers
             }
         }
 
-        public IActionResult Error(string message)
-        {
-            var viewModel = new ErrorViewModel
-            {
-                Message = message,
-                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
-            };
-            return View(viewModel);
-        }
         public IActionResult Login()
         {
             return View();
@@ -199,7 +196,15 @@ namespace WebRhProject.Controllers
             // Credenciais inválidas
             return false;
         }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel
+            {
+                Message = message,
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(viewModel);
+        }
     }
-
 }
-

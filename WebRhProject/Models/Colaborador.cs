@@ -10,6 +10,9 @@ namespace WebRhProject.Models
     public class Colaborador
     {
         public int Id { get; set; }
+        [StringLength(14, MinimumLength = 11, ErrorMessage = "{0} deve ter {1} caracteres")]
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
+        public string CPF { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
@@ -19,6 +22,10 @@ namespace WebRhProject.Models
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
         public string Sobrenome { get; set; }
+        public string? NomeCompleto => $"{Nome} {Sobrenome}";
+        public string? NomeCPF => $"{NomeCompleto} - {CPF}";
+
+
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Display(Name = "Salário Base")]
@@ -41,12 +48,12 @@ namespace WebRhProject.Models
         public DateTime? DataDemissao { get; set; }
         public int? Dependentes { get; set; }
         public int? Filhos { get; set; }
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public Cargo Cargo { get; set; }
         [ForeignKey(nameof(Cargo))]
         [Restrict("FK_Colaborador_CargoId_Cargo_Id")]
-
         public int CargoId { get; set; }
-
+        [Required(ErrorMessage = "O campo {0} é obrigatório")]
         public Empresa Empresa { get; set; }
 
         [ForeignKey(nameof(Empresa))]

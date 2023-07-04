@@ -1,182 +1,242 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using WebRhProject.Data;
 using WebRhProject.Models;
+using WebRhProject.Models.ViewModels;
+using WebRhProject.Services;
 
 namespace WebRhProject.Controllers
 {
     public class HoleritesController : Controller
     {
+        private readonly HoleriteService _holeriteService;
+        private readonly ColaboradorService _colaboradorService;
         private readonly Contexto _context;
 
-        public HoleritesController(Contexto context)
+        public HoleritesController(HoleriteService holeriteService, ColaboradorService colaboradorService, Contexto context)
         {
+            _holeriteService = holeriteService;
+            _colaboradorService = colaboradorService;
             _context = context;
         }
 
-        // GET: Holerites
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var contexto = _context.Holerite.Include(h => h.Colaborador);
-            return View(await contexto.ToListAsync());
-        }
-
-        // GET: Holerites/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Holerite == null)
-            {
-                return NotFound();
-            }
-
-            var holerite = await _context.Holerite
-                .Include(h => h.Colaborador)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (holerite == null)
-            {
-                return NotFound();
-            }
-
-            return View(holerite);
+            var holerites = _holeriteService.GetAllHolerites();
+            return View(holerites);
         }
 
         public IActionResult Create()
         {
-            ViewData["ColaboradorId"] = new SelectList(_context.Colaborador, "Id", "Nome");
-            return View();
+            var colaboradores = _colaboradorService.FindAllActive();
+            var viewModel = new HoleriteFormViewModel { Colaboradores = colaboradores };
+            return View(viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ColaboradorId,Mes,SalarioBruto,DescInss,DescIrrf,HorasNormais,SalarioLiquido,Dependentes,Tipo")] Holerite holerite)
+        public IActionResult Create(HoleriteFormViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Obter o colaborador selecionado
-                var colaborador = await _context.Colaborador.FindAsync(holerite.ColaboradorId);
-
-                // Preencher o salário bruto com o salário base do colaborador
-                holerite.SalarioBruto = colaborador.SalarioBase;
-
-                // Calcular o desconto do INSS
-                holerite.CalcularDescontoInss();
-
-                // Calcular o desconto do IRRF
-                holerite.CalcularDescontoIrrf();
-
-                // Preencher o salário líquido
-                holerite.SalarioLiquido = holerite.SalarioBruto - holerite.DescInss - holerite.DescIrrf;
-
-                _context.Add(holerite);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                viewModel.Colaboradores = _colaboradorService.FindAllActive();
+                return View(viewModel);
             }
 
-            ViewData["ColaboradorId"] = new SelectList(_context.Colaborador, "Id", "Id", holerite.ColaboradorId);
-            return View(holerite);
-        }
-
-
-
-        // GET: Holerites/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Holerite == null)
+            var holerite = new Holerite
             {
-                return NotFound();
-            }
+                ColaboradorId = viewModel.Holerite.ColaboradorId,
+                MesAno = viewModel.Holerite.MesAno,
+                HorasNormais = viewModel.Holerite.HorasNormais,
+                DependentesHolerite = viewModel.Holerite.DependentesHolerite,
+                Tipo = viewModel.Holerite.Tipo
+            };
 
-            var holerite = await _context.Holerite.FindAsync(id);
-            if (holerite == null)
-            {
-                return NotFound();
-            }
-            ViewData["ColaboradorId"] = new SelectList(_context.Colaborador, "Id", "Id", holerite.ColaboradorId);
-            return View(holerite);
-        }
+            var colaborador = _colaboradorService.FindById(viewModel.Holerite.ColaboradorId);
+            holerite.SalarioBruto = colaborador.SalarioBase;
 
-        // POST: Holerites/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ColaboradorId,Mes,SalarioBruto,DescInss,DescIrrf,HorasNormais,SalarioLiquido,Dependentes,Tipo")] Holerite holerite)
-        {
-            if (id != holerite.Id)
-            {
-                return NotFound();
-            }
+            holerite.CalcularHolerite();
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(holerite);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!HoleriteExists(holerite.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ColaboradorId"] = new SelectList(_context.Colaborador, "Id", "Id", holerite.ColaboradorId);
-            return View(holerite);
-        }
-
-        // GET: Holerites/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Holerite == null)
-            {
-                return NotFound();
-            }
-
-            var holerite = await _context.Holerite
-                .Include(h => h.Colaborador)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (holerite == null)
-            {
-                return NotFound();
-            }
-
-            return View(holerite);
-        }
-
-        // POST: Holerites/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            if (_context.Holerite == null)
-            {
-                return Problem("Entity set 'Contexto.Holerite'  is null.");
-            }
-            var holerite = await _context.Holerite.FindAsync(id);
-            if (holerite != null)
-            {
-                _context.Holerite.Remove(holerite);
-            }
-            
-            await _context.SaveChangesAsync();
+            _holeriteService.InsertHolerite(holerite);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool HoleriteExists(int id)
+        public IActionResult Details(int id)
         {
-          return (_context.Holerite?.Any(e => e.Id == id)).GetValueOrDefault();
+            var holerite = _holeriteService.GetHoleriteById(id);
+            if (holerite == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Holerite not found" });
+            }
+
+            return View(holerite);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var holerite = _holeriteService.GetHoleriteById(id);
+            if (holerite == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Holerite not found" });
+            }
+
+            var colaboradores = _colaboradorService.FindAllActive();
+            var viewModel = new HoleriteFormViewModel { Colaboradores = colaboradores, Holerite = holerite };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Holerite holerite)
+        {
+            if (id != holerite.Id)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var colaboradores = _colaboradorService.FindAllActive();
+                var viewModel = new HoleriteFormViewModel { Colaboradores = colaboradores, Holerite = holerite };
+                return View(viewModel);
+            }
+
+            holerite.CalcularHolerite();
+
+            _holeriteService.UpdateHolerite(holerite);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult GetSalarioBase(int colaboradorId)
+        {
+            try
+            {
+                var colaborador = _colaboradorService.FindById(colaboradorId);
+                return Json(new { success = true, salarioBase = colaborador.SalarioBase });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        public IActionResult GetSalarioBaseAndDescontos(int colaboradorId)
+        {
+            try
+            {
+                var colaborador = _colaboradorService.FindById(colaboradorId);
+                double descontoINSS = CalculaDescontoINSS(colaborador.SalarioBase);
+                double descontoIRRF = CalculaDescontoIRRF(colaborador.SalarioBase, descontoINSS);
+
+                return Json(new
+                {
+                    success = true,
+                    salarioBase = colaborador.SalarioBase,
+                    descontoINSS,
+                    descontoIRRF,
+                    salarioLiquido = colaborador.SalarioBase - descontoINSS - descontoIRRF
+                });
+            }
+            catch
+            {
+                return Json(new { success = false });
+            }
+        }
+
+        private double CalculaDescontoINSS(double salarioBase)
+        {
+            double descontoINSS = 0.0;
+
+            if (salarioBase <= 1100.00)
+            {
+                descontoINSS = salarioBase * 0.075; // Alíquota de 7.5% para salários até R$ 1.100,00
+            }
+            else if (salarioBase <= 2203.48)
+            {
+                descontoINSS = salarioBase * 0.09; // Alíquota de 9% para salários de R$ 1.100,01 até R$ 2.203,48
+            }
+            else if (salarioBase <= 3305.22)
+            {
+                descontoINSS = salarioBase * 0.12; // Alíquota de 12% para salários de R$ 2.203,49 até R$ 3.305,22
+            }
+            else if (salarioBase <= 6433.57)
+            {
+                descontoINSS = salarioBase * 0.14; // Alíquota de 14% para salários de R$ 3.305,23 até R$ 6.433,57
+            }
+            else
+            {
+                descontoINSS = 751.99; // Valor fixo para salários acima de R$ 6.433,57 (teto máximo)
+            }
+
+            return descontoINSS;
+        }
+
+        private double CalculaDescontoIRRF(double salarioBase, double descontoINSS)
+        {
+            double descontoIRRF = 0.0;
+            double salarioBaseAjustado = salarioBase - descontoINSS;
+
+            if (salarioBaseAjustado <= 1903.98)
+            {
+                descontoIRRF = 0; // Isento de imposto de renda para salários até R$ 1.903,98
+            }
+            else if (salarioBaseAjustado <= 2826.65)
+            {
+                descontoIRRF = (salarioBaseAjustado * 0.075) - 142.80; // Alíquota de 7.5% para salários de R$ 1.903,99 até R$ 2.826,65
+            }
+            else if (salarioBaseAjustado <= 3751.05)
+            {
+                descontoIRRF = (salarioBaseAjustado * 0.15) - 354.80; // Alíquota de 15% para salários de R$ 2.826,66 até R$ 3.751,05
+            }
+            else if (salarioBaseAjustado <= 4664.68)
+            {
+                descontoIRRF = (salarioBaseAjustado * 0.225) - 636.13; // Alíquota de 22.5% para salários de R$ 3.751,06 até R$ 4.664,68
+            }
+            else
+            {
+                descontoIRRF = (salarioBaseAjustado * 0.275) - 869.36; // Alíquota de 27.5% para salários acima de R$ 4.664,68
+            }
+
+            return descontoIRRF;
+        }
+        public IActionResult GetDependentes(int colaboradorId)
+        {
+            var colaborador = _colaboradorService.FindById(colaboradorId);
+            if (colaborador != null)
+            {
+                return Json(colaborador.Dependentes);
+            }
+            return Json(null);
+        }
+
+
+        public IActionResult Delete(int id)
+        {
+            var holerite = _holeriteService.GetHoleriteById(id);
+            if (holerite == null)
+            {
+                return RedirectToAction(nameof(Error), new { message = "Holerite not found" });
+            }
+
+            return View(holerite);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id, bool confirmDelete)
+        {
+            if (!confirmDelete)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            _holeriteService.DeleteHolerite(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Error(string message)
+        {
+            var viewModel = new ErrorViewModel { Message = message };
+            return View(viewModel);
         }
     }
 }

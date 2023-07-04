@@ -40,11 +40,12 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Colaborador colaborador)
         {
+           
             // Verificar se já existe um colaborador com o mesmo nome e sobrenome
-            bool colaboradorExists = _colaboradorService.Exists(colaborador.Nome, colaborador.Sobrenome);
+            bool colaboradorExists = _colaboradorService.Exists(colaborador.CPF);
             if (colaboradorExists)
             {
-                ModelState.AddModelError(string.Empty, "Já existe um colaborador com o mesmo nome e sobrenome.");
+                ModelState.AddModelError(string.Empty, "Já existe um colaborador com o mesmo CPF");
                 var cargos = _cargoService.FindAll();
                 var empresas = _empresaService.FindAll();
                 var viewModel = new ColaboradorFormViewModel { Cargos = cargos, Empresas = empresas, Colaborador = colaborador };
@@ -205,11 +206,14 @@ namespace WebRhProject.Controllers
             var viewModel = new DemissaoViewModel
             {
                 ColaboradorId = obj.Id,
-                Colaboradores = _colaboradorService.FindAllActive() // Alterado para buscar apenas colaboradores ativos
+                Colaboradores = _colaboradorService.FindAllActive(),
+                // Passe as informações do colaborador para a view
+                Colaborador = obj
             };
 
             return View(viewModel);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

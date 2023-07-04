@@ -16,7 +16,7 @@ services.AddScoped<CargoService>();
 services.AddScoped<ColaboradorService>();
 services.AddScoped<EmpresaService>();
 services.AddScoped<UsuarioService>();
-
+services.AddScoped<HoleriteService>();
 
 var app = builder.Build();
 
@@ -40,8 +40,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-    app.MapControllerRoute(
+app.MapControllerRoute(
     name: "demissao",
     pattern: "colaboradores/demissao/{id}",
     defaults: new { controller = "Colaboradores", action = "Demissao" });
@@ -49,6 +48,5 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Usuarios}/{action=Login}/{id?}");
-
 
 app.Run();

@@ -65,5 +65,11 @@ public class UsuarioService
     {
         return _context.Usuario.Any(u => u.ColaboradorId == colaboradorId);
     }
+    public Usuario FindByEmail(string email)
+    {
+        return _context.Usuario.Include(u => u.Colaborador).SingleOrDefault(u => u.Email == email);
+    }
+
+
 
 }
