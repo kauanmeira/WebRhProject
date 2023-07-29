@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebRhProject.Data;
 using WebRhProject.Models;
 using WebRhProject.Models.ViewModels;
@@ -18,12 +19,12 @@ namespace WebRhProject.Controllers
             _colaboradorService = colaboradorService;
             _context = context;
         }
-
         public IActionResult Index()
         {
-            var holerites = _holeriteService.GetAllHolerites();
+            var holerites = _context.Holerite.Include(h => h.Colaborador).ToList();
             return View(holerites);
         }
+
 
         public IActionResult Create()
         {
@@ -57,6 +58,10 @@ namespace WebRhProject.Controllers
             holerite.CalcularHolerite();
 
             _holeriteService.InsertHolerite(holerite);
+
+            // Save changes to the database
+            _context.SaveChanges();
+
             return RedirectToAction(nameof(Index));
         }
 

@@ -40,8 +40,15 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Colaborador colaborador)
         {
-           
-            // Verificar se já existe um colaborador com o mesmo nome e sobrenome
+            if (string.IsNullOrEmpty(colaborador.CPF))
+            {
+                ModelState.AddModelError(nameof(Colaborador.CPF), "O campo CPF é obrigatório");
+            }
+            if (colaborador.SalarioBase == null || colaborador.SalarioBase == 0.0)
+            {
+                ModelState.AddModelError(nameof(Colaborador.SalarioBase), "O campo Salário Base é obrigatório");
+            }
+
             bool colaboradorExists = _colaboradorService.Exists(colaborador.CPF);
             if (colaboradorExists)
             {
@@ -73,7 +80,7 @@ namespace WebRhProject.Controllers
             _colaboradorService.Insert(colaborador);
             return RedirectToAction(nameof(Index));
         }
-       
+
         public IActionResult Delete(int? id)
         {
             if (id == null)

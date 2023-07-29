@@ -18,7 +18,7 @@ namespace WebRhProject.Data
 
         public DbSet<Cargo>? Cargo { get; set; }
         public DbSet<Empresa> Empresa { get; set; }
-        public DbSet<WebRhProject.Models.Usuario>? Usuario { get; set; }
-        public DbSet<WebRhProject.Models.Holerite>? Holerite { get; set; }
+        public DbSet<Usuario>? Usuario { get; set; }
+        public DbSet<Holerite>? Holerite { get; set; }
     }
 }

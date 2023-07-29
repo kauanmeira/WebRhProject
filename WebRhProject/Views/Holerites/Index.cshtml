@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<WebRhProject.Models.Holerite>
 
+
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Holerites";
 }
 
-<h1>Index</h1>
+<h1>Holerites</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Lançar novo holerite</a>
 </p>
 <table class="table">
     <thead>
@@ -46,7 +47,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Colaborador.Id)
+                @Html.DisplayFor(modelItem => item.Colaborador.Nome)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.MesAno)

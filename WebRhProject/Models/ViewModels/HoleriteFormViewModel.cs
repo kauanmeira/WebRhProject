@@ -4,5 +4,6 @@
     {
         public List<Colaborador>? Colaboradores { get; set; }
         public Holerite Holerite { get; set; }
+
     }
 }

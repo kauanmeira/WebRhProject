@@ -11,8 +11,6 @@
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div asp-validation-summary="All" class="text-danger"></div>
-
             <div class="form-group">
                 <label asp-for="Usuario.Email" class="control-label"></label>
                 <input asp-for="Usuario.Email" class="form-control input-field" />
@@ -39,25 +37,6 @@
                 <span asp-validation-for="Usuario.ColaboradorId" class="text-danger"></span>
             </div>
 
-            @if (!ViewData.ModelState.IsValid)
-            {
-                <div class="alert alert-danger" role="alert">
-                    Ocorreram erros no formulário:
-                    <ul>
-                        @foreach (var key in ViewData.ModelState.Keys)
-                        {
-                            if (key == "Usuario.Email" && ViewData.ModelState.ContainsKey("Email"))
-                            {
-                                <li>@ViewData.ModelState["Email"].Errors.FirstOrDefault()?.ErrorMessage</li>
-                            }
-                            else if (key == "Usuario.ConfirmarSenha" && ViewData.ModelState.ContainsKey("ConfirmarSenha"))
-                            {
-                                <li>@ViewData.ModelState["ConfirmarSenha"].Errors.FirstOrDefault()?.ErrorMessage</li>
-                            }
-                        }
-                    </ul>
-                </div>
-            }
 
             <div class="form-group text-center">
                 <input type="submit" value="Create" class="btn btn-primary" />

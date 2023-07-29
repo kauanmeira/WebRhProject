@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebRhProject.Models
 {
     [Table("TbUsuario")]
-    public class Usuario
+    public class Usuario 
     {
         public int Id { get; set; }
 

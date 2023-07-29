@@ -8,7 +8,7 @@
 
 <hr />
 <div class="row">
-    <div class="col-md-4 offset-md-3">
+    <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -18,12 +18,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="RazaoSocial" class="control-label"></label>
-                <input asp-for="RazaoSocial" class="form-control input-field" />
+                <input asp-for="RazaoSocial" class="form-control input-field uppercase" />
                 <span asp-validation-for="RazaoSocial" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="NomeFantasia" class="control-label"></label>
-                <input asp-for="NomeFantasia" class="form-control input-field" />
+                <input asp-for="NomeFantasia" class="form-control input-field uppercase" />
                 <span asp-validation-for="NomeFantasia" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -102,6 +102,11 @@
                         }
                     });
                 }
+            });
+
+            // Seletor para campos com a classe "uppercase"
+            $('.uppercase').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
             });
         });
     </script>

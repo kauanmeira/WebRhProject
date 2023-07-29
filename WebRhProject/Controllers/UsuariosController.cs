@@ -206,5 +206,12 @@ namespace WebRhProject.Controllers
             };
             return View(viewModel);
         }
+        [HttpGet]
+        public IActionResult VerificarEmail(string email)
+        {
+            bool exists = _usuarioService.EmailExists(email);
+            return Json(new { exists });
+        }
+
     }
 }

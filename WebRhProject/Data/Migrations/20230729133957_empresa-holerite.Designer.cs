@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebRhProject.Data;
 
@@ -11,9 +12,10 @@ using WebRhProject.Data;
 namespace WebRhProject.Data.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230729133957_empresa-holerite")]
+    partial class empresaholerite
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,10 +187,6 @@ namespace WebRhProject.Data.Migrations
                     b.Property<double>("DescontoIRRF")
                         .HasColumnType("float");
 
-                    b.Property<int>("EmpresaId")
-                        .HasColumnType("int")
-                        .HasColumnName("EmpresaId");
-
                     b.Property<double>("HorasNormais")
                         .HasColumnType("float");
 
@@ -207,8 +205,6 @@ namespace WebRhProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ColaboradorId");
-
-                    b.HasIndex("EmpresaId");
 
                     b.ToTable("TbHolerite");
                 });
@@ -269,15 +265,7 @@ namespace WebRhProject.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebRhProject.Models.Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Colaborador");
-
-                    b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("WebRhProject.Models.Usuario", b =>
