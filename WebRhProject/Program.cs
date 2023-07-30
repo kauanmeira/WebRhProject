@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using WebRhProject.Data;
 using WebRhProject.Services;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +19,13 @@ services.AddScoped<ColaboradorService>();
 services.AddScoped<EmpresaService>();
 services.AddScoped<UsuarioService>();
 services.AddScoped<HoleriteService>();
+services.AddScoped<BeneficioService>();
+
+// Configura a serialização JSON para preservar referências circulares
+services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 
 var app = builder.Build();
 
@@ -50,3 +59,5 @@ app.MapControllerRoute(
     pattern: "{controller=Usuarios}/{action=Login}/{id?}");
 
 app.Run();
+
+

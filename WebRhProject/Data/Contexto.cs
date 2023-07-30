@@ -20,5 +20,6 @@ namespace WebRhProject.Data
         public DbSet<Empresa> Empresa { get; set; }
         public DbSet<Usuario>? Usuario { get; set; }
         public DbSet<Holerite>? Holerite { get; set; }
+        public DbSet<WebRhProject.Models.Beneficio>? Beneficio { get; set; }
     }
 }

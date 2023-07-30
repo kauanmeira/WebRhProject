@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using System.Xml.Linq;
 using WebRhProject.Models;
 using WebRhProject.Models.enums;
@@ -48,16 +49,20 @@ namespace WebRhProject.Models
         public DateTime? DataDemissao { get; set; }
         public int? Dependentes { get; set; }
         public int? Filhos { get; set; }
+
+        [JsonIgnore]
+        public Cargo Cargo;
+
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public Cargo? Cargo { get; set; }
         [ForeignKey(nameof(Cargo))]
         [Restrict("FK_Colaborador_CargoId_Cargo_Id")]
         public int CargoId { get; set; }
+
+        [JsonIgnore]
+        public Empresa Empresa;
+
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        public Empresa? Empresa { get; set; }
-
         [ForeignKey(nameof(Empresa))]
-
         public int EmpresaId { get; set; }
         public bool Ativo { get; set; } = true;
         public Usuario? Usuario { get; set; }

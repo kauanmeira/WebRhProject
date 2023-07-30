@@ -17,10 +17,35 @@ namespace WebRhProject.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.18")
+                .HasAnnotation("ProductVersion", "6.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("WebRhProject.Models.Beneficio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("HoleriteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HoleriteId");
+
+                    b.ToTable("Beneficio");
+                });
 
             modelBuilder.Entity("WebRhProject.Models.Cargo", b =>
                 {
@@ -118,6 +143,31 @@ namespace WebRhProject.Data.Migrations
                     b.ToTable("TbColaborador");
                 });
 
+            modelBuilder.Entity("WebRhProject.Models.Desconto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("HoleriteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HoleriteId");
+
+                    b.ToTable("Desconto");
+                });
+
             modelBuilder.Entity("WebRhProject.Models.Empresa", b =>
                 {
                     b.Property<int>("Id")
@@ -185,10 +235,6 @@ namespace WebRhProject.Data.Migrations
                     b.Property<double>("DescontoIRRF")
                         .HasColumnType("float");
 
-                    b.Property<int>("EmpresaId")
-                        .HasColumnType("int")
-                        .HasColumnName("EmpresaId");
-
                     b.Property<double>("HorasNormais")
                         .HasColumnType("float");
 
@@ -207,8 +253,6 @@ namespace WebRhProject.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ColaboradorId");
-
-                    b.HasIndex("EmpresaId");
 
                     b.ToTable("TbHolerite");
                 });
@@ -242,23 +286,33 @@ namespace WebRhProject.Data.Migrations
                     b.ToTable("TbUsuario");
                 });
 
+            modelBuilder.Entity("WebRhProject.Models.Beneficio", b =>
+                {
+                    b.HasOne("WebRhProject.Models.Holerite", null)
+                        .WithMany("Beneficios")
+                        .HasForeignKey("HoleriteId");
+                });
+
             modelBuilder.Entity("WebRhProject.Models.Colaborador", b =>
                 {
-                    b.HasOne("WebRhProject.Models.Cargo", "Cargo")
+                    b.HasOne("WebRhProject.Models.Cargo", null)
                         .WithMany("Colaboradores")
                         .HasForeignKey("CargoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebRhProject.Models.Empresa", "Empresa")
+                    b.HasOne("WebRhProject.Models.Empresa", null)
                         .WithMany("Colaboradores")
                         .HasForeignKey("EmpresaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
 
-                    b.Navigation("Cargo");
-
-                    b.Navigation("Empresa");
+            modelBuilder.Entity("WebRhProject.Models.Desconto", b =>
+                {
+                    b.HasOne("WebRhProject.Models.Holerite", null)
+                        .WithMany("Descontos")
+                        .HasForeignKey("HoleriteId");
                 });
 
             modelBuilder.Entity("WebRhProject.Models.Holerite", b =>
@@ -269,15 +323,7 @@ namespace WebRhProject.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebRhProject.Models.Empresa", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("EmpresaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Colaborador");
-
-                    b.Navigation("Empresa");
                 });
 
             modelBuilder.Entity("WebRhProject.Models.Usuario", b =>
@@ -304,6 +350,13 @@ namespace WebRhProject.Data.Migrations
             modelBuilder.Entity("WebRhProject.Models.Empresa", b =>
                 {
                     b.Navigation("Colaboradores");
+                });
+
+            modelBuilder.Entity("WebRhProject.Models.Holerite", b =>
+                {
+                    b.Navigation("Beneficios");
+
+                    b.Navigation("Descontos");
                 });
 #pragma warning restore 612, 618
         }

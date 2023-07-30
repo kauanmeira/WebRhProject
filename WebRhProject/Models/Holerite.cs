@@ -46,6 +46,10 @@ namespace WebRhProject.Models
         public int DependentesHolerite { get; set; }
         public int? Tipo { get; set; }
 
+        public virtual List<Beneficio> Beneficios { get; set; }
+
+        public virtual List<Desconto> Descontos { get; set; }
+
 
         public Holerite()
         {
@@ -72,6 +76,8 @@ namespace WebRhProject.Models
         {
             if (Colaborador != null)
             {
+
+
                 SalarioBruto = Colaborador.SalarioBase;
             }
         }
