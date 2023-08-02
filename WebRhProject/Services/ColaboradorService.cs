@@ -32,8 +32,11 @@ namespace WebRhProject.Services
 
         public Colaborador FindById(int id)
         {
-            return _context.Colaborador.Include(obj => obj.Cargo).FirstOrDefault(obj => obj.Id == id);
+            return _context.Colaborador
+                .Include(colaborador => colaborador.Cargo)
+                .FirstOrDefault(colaborador => colaborador.Id == id);
         }
+
 
         public void Remove(int id)
         {

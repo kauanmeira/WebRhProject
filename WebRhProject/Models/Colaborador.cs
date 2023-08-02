@@ -51,12 +51,13 @@ namespace WebRhProject.Models
         public int? Filhos { get; set; }
 
         [JsonIgnore]
-        public Cargo Cargo;
+        public Cargo Cargo { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [ForeignKey(nameof(Cargo))]
         [Restrict("FK_Colaborador_CargoId_Cargo_Id")]
         public int CargoId { get; set; }
+
 
         [JsonIgnore]
         public Empresa Empresa;

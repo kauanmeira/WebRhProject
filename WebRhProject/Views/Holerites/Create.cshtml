@@ -88,10 +88,14 @@
                         data: { colaboradorId: selectedColaboradorId },
                         method: 'GET',
                         success: function (result) {
-                            $('#Holerite_SalarioBruto').val(result.salarioBase.toFixed(2));
-                            $('#Holerite_DescontoINSS').val(result.descontoINSS.toFixed(2));
-                            $('#Holerite_DescontoIRRF').val(result.descontoIRRF.toFixed(2));
-                            $('#Holerite_SalarioLiquido').val(result.salarioLiquido.toFixed(2));
+                            if (result && result.salarioBase !== undefined && result.descontoINSS !== undefined && result.descontoIRRF !== undefined && result.salarioLiquido !== undefined) {
+                                $('#Holerite_SalarioBruto').val(result.salarioBase.toFixed(2));
+                                $('#Holerite_DescontoINSS').val(result.descontoINSS.toFixed(2));
+                                $('#Holerite_DescontoIRRF').val(result.descontoIRRF.toFixed(2));
+                                $('#Holerite_SalarioLiquido').val(result.salarioLiquido.toFixed(2));
+                            } else {
+                                alert('Failed to retrieve salario base and descontos.');
+                            }
                         },
                         error: function () {
                             alert('Failed to retrieve the salario base and descontos.');
@@ -104,7 +108,11 @@
                         data: { colaboradorId: selectedColaboradorId },
                         method: 'GET',
                         success: function (result) {
-                            $('#DependentesHolerite').val(result);
+                            if (result !== undefined) {
+                                $('#DependentesHolerite').val(result);
+                            } else {
+                                alert('Failed to retrieve the dependentes.');
+                            }
                         },
                         error: function () {
                             alert('Failed to retrieve the dependentes.');

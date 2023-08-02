@@ -3,6 +3,8 @@ using WebRhProject.Data;
 using WebRhProject.Models;
 using WebRhProject.Models.ViewModels;
 using WebRhProject.Services;
+using Microsoft.Extensions.Logging;
+
 
 namespace WebRhProject.Controllers
 {
@@ -12,11 +14,14 @@ namespace WebRhProject.Controllers
         private readonly ColaboradorService _colaboradorService;
         private readonly Contexto _context;
 
-        public HoleritesController(HoleriteService holeriteService, ColaboradorService colaboradorService, Contexto context)
+        private readonly ILogger<HoleritesController> _logger;
+
+        public HoleritesController(HoleriteService holeriteService, ColaboradorService colaboradorService, Contexto context, ILogger<HoleritesController> logger)
         {
             _holeriteService = holeriteService;
             _colaboradorService = colaboradorService;
             _context = context;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -142,6 +147,7 @@ namespace WebRhProject.Controllers
             }
         }
 
+
         private double CalculaDescontoINSS(double salarioBase)
         {
             double descontoINSS = 0.0;
@@ -203,10 +209,19 @@ namespace WebRhProject.Controllers
             var colaborador = _colaboradorService.FindById(colaboradorId);
             if (colaborador != null)
             {
+                // Adicione logs para verificar o valor da propriedade "Dependentes"
+                _logger.LogInformation("Colaborador ID: {Id}, Dependentes: {Dependentes}", colaborador.Id, colaborador.Dependentes);
+
                 return Json(colaborador.Dependentes);
             }
+
+            // Adicione logs para identificar quando o colaborador é nulo
+            _logger.LogWarning("Colaborador não encontrado para o ID: {Id}", colaboradorId);
+
             return Json(null);
         }
+
+
 
 
         public IActionResult Delete(int id)

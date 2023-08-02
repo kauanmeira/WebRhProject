@@ -9,13 +9,14 @@ namespace WebRhProject.Data
 {
     public class Contexto : DbContext
     {
-        public Contexto (DbContextOptions<Contexto> options)
+        public Contexto(DbContextOptions<Contexto> options)
             : base(options)
         {
+            // Desabilita o Lazy Loading
+            ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public DbSet<Colaborador> Colaborador { get; set; } = default!;
-
         public DbSet<Cargo>? Cargo { get; set; }
         public DbSet<Empresa> Empresa { get; set; }
         public DbSet<Usuario>? Usuario { get; set; }
