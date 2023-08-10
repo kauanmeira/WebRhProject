@@ -29,6 +29,38 @@
                 <span asp-validation-for="NomeFantasia" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="CEP" class="control-label">CEP</label>
+                <input type="text" asp-for="CEP" class="form-control input-field" id="cep-input" />
+                <span asp-validation-for="CEP" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label">Logradouro</label>
+                <input type="text" class="form-control input-field" id="logradouro-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Bairro</label>
+                <input type="text" class="form-control input-field" id="bairro-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Numero" class="control-label">Número</label>
+                <input asp-for="Numero" class="form-control input-field" />
+                <span asp-validation-for="Numero" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Cidade</label>
+                <input type="text" class="form-control input-field" id="cidade-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Estado</label>
+                <input type="text" class="form-control input-field" id="estado-input" readonly />
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Salvar" class="btn btn-primary" />
             </div>
         </form>
@@ -39,3 +71,47 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#Cnpj').mask('00.000.000/0000-00', { reverse: true });
+            $('#cep-input').mask('00000-000');
+            // Lidar com a tecla Enter nos campos de entrada
+            $('input').keydown(function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    var nextInput = $(this).closest('.form-group').next('.form-group').find('input');
+                    if (nextInput.length > 0) {
+                        nextInput.focus();
+                    } else {
+                        $(this).blur();
+                    }
+                }
+            });
+
+            $('#cep-input').blur(function () {
+                var cep = $(this).val().replace(/\D/g, '');
+
+                if (cep) {
+                    var url = 'https://viacep.com.br/ws/' + cep + '/json/';
+
+                    $.getJSON(url, function (data) {
+                        if (!data.erro) {
+                            $('#logradouro-input').val(data.logradouro);
+                            $('#bairro-input').val(data.bairro);
+                            $('#cidade-input').val(data.localidade);
+                            $('#estado-input').val(data.uf);
+                        }
+                    });
+                }
+            });
+
+            // Seletor para campos com a classe "uppercase"
+            $('.uppercase').keyup(function () {
+                $(this).val($(this).val().toUpperCase());
+            });
+        });
+    </script>
+}

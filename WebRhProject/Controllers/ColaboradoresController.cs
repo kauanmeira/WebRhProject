@@ -77,8 +77,8 @@ namespace WebRhProject.Controllers
                 }
             }
 
-            _colaboradorService.Insert(colaborador);
-            return RedirectToAction(nameof(Index));
+                _colaboradorService.Insert(colaborador);
+                return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Delete(int? id)
@@ -154,20 +154,45 @@ namespace WebRhProject.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Colaborador colaborador)
         {
-            if (id != colaborador.Id)
+            if (string.IsNullOrEmpty(colaborador.CPF))
             {
-                return RedirectToAction(nameof(Error), new { message = "Id mismatch" });
+                ModelState.AddModelError(nameof(Colaborador.CPF), "O campo CPF é obrigatório");
+            }
+            if (colaborador.SalarioBase == null || colaborador.SalarioBase == 0.0)
+            {
+                ModelState.AddModelError(nameof(Colaborador.SalarioBase), "O campo Salário Base é obrigatório");
             }
 
-            try
+            bool colaboradorExists = _colaboradorService.Exists(colaborador.CPF);
+            if (colaboradorExists)
             {
-                _colaboradorService.Update(colaborador);
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Já existe um colaborador com o mesmo CPF");
+                var cargos = _cargoService.FindAll();
+                var empresas = _empresaService.FindAll();
+                var viewModel = new ColaboradorFormViewModel { Cargos = cargos, Empresas = empresas, Colaborador = colaborador };
+                return View(viewModel);
             }
-            catch (ApplicationException e)
+
+            string cep = colaborador.CEP;
+            string url = $"https://viacep.com.br/ws/{cep}/json/";
+
+            using (HttpClient client = new HttpClient())
             {
-                return RedirectToAction(nameof(Error), new { message = e.Message });
+                var response = client.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    var addressData = JsonConvert.DeserializeObject<dynamic>(jsonResult);
+
+                    colaborador.Logradouro = addressData.logradouro;
+                    colaborador.Bairro = addressData.bairro;
+                    colaborador.Cidade = addressData.localidade;
+                    colaborador.Estado = addressData.uf;
+                }
             }
+
+            _colaboradorService.Update(colaborador);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Error(string message)

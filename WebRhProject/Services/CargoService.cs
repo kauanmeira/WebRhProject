@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebRhProject.Data;
 using WebRhProject.Models;
+using WebRhProject.Services.Exceptions;
 
 namespace WebRhProject.Services
 {
@@ -16,7 +17,27 @@ namespace WebRhProject.Services
         {
             _context = context;
         }
-
+        public void Insert(Cargo obj)
+        {
+            _context.Add(obj);
+            _context.SaveChanges();
+        }
+        public void Update(Cargo obj)
+        {
+            if (!_context.Cargo.Any(x => x.Id == obj.Id))
+            {
+                throw new NotFoundException("Id not found");
+            }
+            try
+            {
+                _context.Update(obj);
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException e)
+            {
+                throw new DbConcurrencyException(e.Message);
+            }
+        }
         public List<Cargo> FindAll()
         {
             return _context.Cargo.OrderBy(x => x.Nome).ToList();
@@ -25,10 +46,7 @@ namespace WebRhProject.Services
         {
             return _context.Cargo.Find(id);
         }
-        public bool HasAnyCollaborators(int cargoId)
-        {
-            return _context.Colaborador.Any(colaborador => colaborador.CargoId == cargoId);
-        }
+
 
     }
 }

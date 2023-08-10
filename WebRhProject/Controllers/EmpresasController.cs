@@ -85,17 +85,11 @@ namespace WebRhProject.Controllers
                 return View(empresa);
             }
 
-            if (ModelState.IsValid)
-            {
-                _context.Empresa.Add(empresa);
-                await ObterInformacoesEndereco(empresa);
-
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(empresa);
+            await ObterInformacoesEndereco(empresa); // Chama o método para preencher informações de endereço
+            _empresaService.Insert(empresa); // Essa linha já insere a empresa no banco de dados
+            return RedirectToAction(nameof(Index));
         }
+
 
         // GET: Empresas/Edit/5
         public async Task<IActionResult> Edit(int? id)

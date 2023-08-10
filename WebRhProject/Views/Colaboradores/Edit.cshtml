@@ -14,23 +14,28 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Colaborador.Id" />
             <div class="form-group">
+                <label asp-for="Colaborador.CPF" class="control-label"></label>
+                <input asp-for="Colaborador.CPF" class="form-control input-field" />
+                <span asp-validation-for="Colaborador.CPF" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Colaborador.Nome" class="control-label"></label>
-                <input asp-for="Colaborador.Nome" class="form-control" />
+                <input asp-for="Colaborador.Nome" class="form-control input-field" />
                 <span asp-validation-for="Colaborador.Nome" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.Sobrenome" class="control-label"></label>
-                <input asp-for="Colaborador.Sobrenome" class="form-control" />
+                <input asp-for="Colaborador.Sobrenome" class="form-control input-field" />
                 <span asp-validation-for="Colaborador.Sobrenome" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.SalarioBase" class="control-label"></label>
-                <input asp-for="Colaborador.SalarioBase" class="form-control" />
+                <input asp-for="Colaborador.SalarioBase" class="form-control input-field" />
                 <span asp-validation-for="Colaborador.SalarioBase" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.DataNascimento" class="control-label"></label>
-                <input asp-for="Colaborador.DataNascimento" class="form-control" />
+                <input asp-for="Colaborador.DataNascimento" class="form-control input-field" />
                 <span asp-validation-for="Colaborador.DataNascimento" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -40,13 +45,45 @@
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.Dependentes" class="control-label"></label>
-                <input asp-for="Colaborador.Dependentes" class="form-control" />
+                <input asp-for="Colaborador.Dependentes" class="form-control input-field" />
                 <span asp-validation-for="Colaborador.Dependentes" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.Filhos" class="control-label"></label>
-                <input asp-for="Colaborador.Filhos" class="form-control" />
+                <input asp-for="Colaborador.Filhos" class="form-control input-field" />
                 <span asp-validation-for="Colaborador.Filhos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.CEP" class="control-label">CEP</label>
+                <input type="text" asp-for="Colaborador.CEP" class="form-control input-field" id="cep-input" />
+                <span asp-validation-for="Colaborador.CEP" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label">Logradouro</label>
+                <input type="text" class="form-control input-field" id="logradouro-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Bairro</label>
+                <input type="text" class="form-control input-field" id="bairro-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Colaborador.Numero" class="control-label">Número</label>
+                <input asp-for="Colaborador.Numero" class="form-control input-field" />
+                <span asp-validation-for="Colaborador.Numero" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Cidade</label>
+                <input type="text" class="form-control input-field" id="cidade-input" readonly />
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Estado</label>
+                <input type="text" class="form-control input-field" id="estado-input" readonly />
             </div>
             <div class="form-group">
                 <label asp-for="Colaborador.CargoId" class="control-label">Cargo</label>
@@ -54,6 +91,13 @@
                     <option value="">Selecione um cargo</option>
                 </select>
                 <span asp-validation-for="Colaborador.CargoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Colaborador.EmpresaId" class="control-label">Empresa</label>
+                <select asp-for="Colaborador.EmpresaId" asp-items="@(new SelectList(Model.Empresas,"Id","NomeFantasia"))" class="form-control  input-field">
+                    <option value="">Selecione uma empresa</option>
+                </select>
+                <span asp-validation-for="Colaborador.EmpresaId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Salvar" class="btn btn-primary" />
@@ -67,5 +111,60 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0/dist/autoNumeric.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Máscara para o campo de CEP
+            $('#cep-input').mask('00000-000');
+
+            $('#cep-input').blur(function () {
+                var cep = $(this).val().replace(/\D/g, '');
+
+                if (cep) {
+                    var url = 'https://viacep.com.br/ws/' + cep + '/json/';
+
+                    $.getJSON(url, function (data) {
+                        if (!data.erro) {
+                            $('#logradouro-input').val(data.logradouro);
+                            $('#bairro-input').val(data.bairro);
+                            $('#cidade-input').val(data.localidade);
+                            $('#estado-input').val(data.uf);
+                        }
+                    });
+                }
+            });
+
+            // Formatar o campo de salário base
+            var salarioBaseInput = document.getElementById('salario-base-input');
+            new AutoNumeric(salarioBaseInput, {
+                currencySymbol: 'R$ ',
+                decimalPlaces: 2,
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true,
+            });
+
+            // Lidar com a tecla Enter nos campos de entrada
+            $('input').keydown(function (event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    var nextInput = $(this).closest('.form-group').next('.form-group').find('input');
+                    if (nextInput.length > 0) {
+                        nextInput.focus();
+                    } else {
+                        $(this).blur();
+                    }
+                }
+            });
+        });
+
+        function formatarNome(input) {
+            input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1).toLowerCase();
+        }
+
+        function formatarSobrenome(input) {
+            input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1).toLowerCase();
+        }
+    </script>
 }

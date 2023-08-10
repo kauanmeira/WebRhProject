@@ -23,7 +23,9 @@ namespace WebRhProject.Models
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "{0} size must be between {2} and {1} caracters")]
         public string Sobrenome { get; set; }
+        [JsonIgnore]
         public string? NomeCompleto => $"{Nome} {Sobrenome}";
+        [JsonIgnore]
         public string? NomeCPF => $"{NomeCompleto} - CPF: {CPF}";
 
 
@@ -46,12 +48,13 @@ namespace WebRhProject.Models
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime DataAdmissao { get; set; }
         [DataType(DataType.Date)]
+        [JsonIgnore]
         public DateTime? DataDemissao { get; set; }
         public int? Dependentes { get; set; }
         public int? Filhos { get; set; }
 
         [JsonIgnore]
-        public Cargo Cargo { get; set; }
+        public Cargo? Cargo { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [ForeignKey(nameof(Cargo))]
@@ -65,12 +68,19 @@ namespace WebRhProject.Models
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [ForeignKey(nameof(Empresa))]
         public int EmpresaId { get; set; }
+        [JsonIgnore]
         public bool Ativo { get; set; } = true;
+        [JsonIgnore]
         public Usuario? Usuario { get; set; }
+        [JsonIgnore]
         public string? Logradouro { get; set; }
+        [JsonIgnore]
         public string? Bairro { get; set; }
+        [JsonIgnore]
         public string? Numero { get; set; }
+        [JsonIgnore]
         public string? Cidade { get; set; }
+        [JsonIgnore]
         public string? Estado { get; set; }
 
 

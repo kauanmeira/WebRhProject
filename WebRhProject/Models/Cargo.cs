@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebRhProject.Models
 {
@@ -8,7 +9,7 @@ namespace WebRhProject.Models
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-
+        [JsonIgnore]
         public ICollection<Colaborador>? Colaboradores { get; set; }
 
         public Cargo()

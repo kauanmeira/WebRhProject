@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace WebRhProject.Models
 {
@@ -25,7 +26,8 @@ namespace WebRhProject.Models
         [DataType(DataType.Password)]
         public string ConfirmarSenha { get; set; }
 
-        public Colaborador Colaborador { get; set; }
+        [JsonIgnore]
+        public Colaborador? Colaborador { get; set; }
         [ForeignKey(nameof(Colaborador))]
         public int ColaboradorId { get; set; }
 
