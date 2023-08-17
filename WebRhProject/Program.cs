@@ -25,6 +25,8 @@ services.AddScoped<BeneficioService>();
 services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.WriteIndented = true;
+    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
 });
 
 var app = builder.Build();

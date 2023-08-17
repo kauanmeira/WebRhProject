@@ -59,7 +59,7 @@ namespace WebRhProject.Controllers
         // POST: Empresas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Cnpj,RazaoSocial,NomeFantasia")] Empresa empresa)
+        public async Task<IActionResult> Create([Bind("Id,Cnpj,RazaoSocial,NomeFantasia, CEP")] Empresa empresa)
         {
             bool cnpjExists = await _context.Empresa.AnyAsync(u => u.Cnpj == empresa.Cnpj);
 
@@ -85,62 +85,100 @@ namespace WebRhProject.Controllers
                 return View(empresa);
             }
 
-            await ObterInformacoesEndereco(empresa); // Chama o método para preencher informações de endereço
-            _empresaService.Insert(empresa); // Essa linha já insere a empresa no banco de dados
+            string cep = empresa.CEP;
+            string url = $"https://viacep.com.br/ws/{cep}/json/";
+
+            using (HttpClient client = new HttpClient())
+            {
+                var response = client.GetAsync(url).Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResult = response.Content.ReadAsStringAsync().Result;
+                    var addressData = JsonConvert.DeserializeObject<dynamic>(jsonResult);
+
+                    empresa.Logradouro = addressData.logradouro;
+                    empresa.Bairro = addressData.bairro;
+                    empresa.Cidade = addressData.localidade;
+                    empresa.Estado = addressData.uf;
+                }
+            }
+
+            _empresaService.Insert(empresa); 
             return RedirectToAction(nameof(Index));
         }
 
 
-        // GET: Empresas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+            // GET: Empresas/Edit/5
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null || _context.Empresa == null)
         {
-            if (id == null || _context.Empresa == null)
-            {
-                return NotFound();
-            }
-
-            var empresa = await _context.Empresa.FindAsync(id);
-            if (empresa == null)
-            {
-                return NotFound();
-            }
-            return View(empresa);
+            return NotFound();
         }
 
-        // POST: Empresas/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Cnpj,RazaoSocial,NomeFantasia")] Empresa empresa)
+        var empresa = await _context.Empresa.FindAsync(id);
+        if (empresa == null)
         {
-            if (id != empresa.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(empresa);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EmpresaExists(empresa.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(empresa);
+            return NotFound();
         }
+    
+        return View(empresa);
+    }
+            [HttpPost]
+            [ValidateAntiForgeryToken]
+            public async Task<IActionResult> Edit(int id, Empresa empresa)
+            {
+                if (id != empresa.Id)
+                {
+                    return NotFound();
+                }
 
-        // GET: Empresas/Delete/5
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        string cep = empresa.CEP;
+                        string url = $"https://viacep.com.br/ws/{cep}/json/";
+
+                        using (HttpClient client = new HttpClient())
+                        {
+                            var response = await client.GetAsync(url);
+                            if (response.IsSuccessStatusCode)
+                            {
+                                var jsonResult = await response.Content.ReadAsStringAsync();
+                                var addressData = JsonConvert.DeserializeObject<dynamic>(jsonResult);
+
+                                empresa.Logradouro = addressData.logradouro;
+                                empresa.Bairro = addressData.bairro;
+                                empresa.Cidade = addressData.localidade;
+                                empresa.Estado = addressData.uf;
+                            }
+                        }
+
+                        
+                        ModelState.Remove("CEP");
+
+                        _context.Update(empresa);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!EmpresaExists(empresa.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                return View(empresa);
+            }
+
+
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Empresa == null)
@@ -166,7 +204,6 @@ namespace WebRhProject.Controllers
             return View(empresa);
         }
 
-        // POST: Empresas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

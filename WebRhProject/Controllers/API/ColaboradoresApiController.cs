@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebRhProject.Models;
+using WebRhProject.Models.dto;
 using WebRhProject.Services;
 using WebRhProject.Services.Exceptions;
 
@@ -56,23 +57,41 @@ namespace WebRhProject.Controllers.API
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Colaborador colaborador)
+        public IActionResult Put(int id, [FromBody] ColaboradorDTO colaboradorDTO)
         {
-            if (id != colaborador.Id)
-            {
-                return BadRequest();
-            }
             try
             {
-                _colaboradorService.Update(colaborador);
+                var existingColaborador = _colaboradorService.FindById(id);
+
+                if (existingColaborador == null)
+                {
+                    return NotFound();
+                }
+
+                existingColaborador.CPF = colaboradorDTO.Cpf;
+                existingColaborador.Nome = colaboradorDTO.Nome;
+                existingColaborador.Sobrenome = colaboradorDTO.Sobrenome;
+                existingColaborador.SalarioBase = colaboradorDTO.SalarioBase;
+                existingColaborador.DataNascimento = colaboradorDTO.DataNascimento;
+                existingColaborador.DataAdmissao = colaboradorDTO.DataAdmissao;
+                existingColaborador.Dependentes = colaboradorDTO.Dependentes;
+                existingColaborador.Filhos = colaboradorDTO.Filhos;
+                existingColaborador.CargoId = colaboradorDTO.CargoId;
+                existingColaborador.EmpresaId = colaboradorDTO.EmpresaId;
+                existingColaborador.CEP = colaboradorDTO.CEP;
+
+                _colaboradorService.Update(existingColaborador);
             }
             catch (NotFoundException)
             {
                 return NotFound();
             }
-            return NoContent();
+
+            return Ok(colaboradorDTO);
         }
+
+
+
     }
 }

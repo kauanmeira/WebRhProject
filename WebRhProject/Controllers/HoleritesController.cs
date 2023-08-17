@@ -47,23 +47,25 @@ namespace WebRhProject.Controllers
                 return View(viewModel);
             }
 
+            var colaborador = _colaboradorService.FindById(viewModel.Holerite.ColaboradorId);
+
             var holerite = new Holerite
             {
                 ColaboradorId = viewModel.Holerite.ColaboradorId,
                 MesAno = viewModel.Holerite.MesAno,
                 HorasNormais = viewModel.Holerite.HorasNormais,
                 DependentesHolerite = viewModel.Holerite.DependentesHolerite,
-                Tipo = viewModel.Holerite.Tipo
+                Tipo = viewModel.Holerite.Tipo,
+                SalarioBruto = colaborador.SalarioBase
             };
 
-            var colaborador = _colaboradorService.FindById(viewModel.Holerite.ColaboradorId);
-            holerite.SalarioBruto = colaborador.SalarioBase;
-
+            // Realize os cálculos para os valores de desconto e salário líquido
             holerite.CalcularHolerite();
 
             _holeriteService.InsertHolerite(holerite);
             return RedirectToAction(nameof(Index));
         }
+
 
         public IActionResult Details(int id)
         {

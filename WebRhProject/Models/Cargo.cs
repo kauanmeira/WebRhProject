@@ -12,6 +12,7 @@ namespace WebRhProject.Models
         [JsonIgnore]
         public ICollection<Colaborador>? Colaboradores { get; set; }
 
+        
         public Cargo()
         {
             Colaboradores = new List<Colaborador>();

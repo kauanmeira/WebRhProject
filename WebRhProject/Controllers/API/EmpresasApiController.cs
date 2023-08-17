@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebRhProject.Models;
+using WebRhProject.Models.dto;
 using WebRhProject.Services;
 using WebRhProject.Services.Exceptions;
 
@@ -55,21 +56,35 @@ namespace WebRhProject.Controllers.API
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Empresa empresa)
+        public IActionResult Put(int id, [FromBody] EmpresaDTO empresaDTO)
         {
-            if (id != empresa.Id)
-            {
-                return BadRequest();
-            }
             try
             {
-                _empresaService.Update(empresa);
+                var existingEmpresa = _empresaService.FindById(id);
+
+                if (existingEmpresa == null)
+                {
+                    return NotFound();
+                }
+
+                existingEmpresa.Cnpj = empresaDTO.Cnpj;
+                existingEmpresa.RazaoSocial = empresaDTO.RazaoSocial;
+                existingEmpresa.NomeFantasia = empresaDTO.NomeFantasia;
+                existingEmpresa.CEP = empresaDTO.CEP;
+                existingEmpresa.Numero = empresaDTO.Numero;
+
+
+
+
+
+                _empresaService.Update(existingEmpresa);
             }
             catch (NotFoundException)
             {
                 return NotFound();
             }
-            return NoContent();
+
+            return Ok(empresaDTO);
         }
     }
 }

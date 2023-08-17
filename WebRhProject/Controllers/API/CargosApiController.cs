@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebRhProject.Models;
+using WebRhProject.Models.dto;
 using WebRhProject.Services;
 using WebRhProject.Services.Exceptions;
 
@@ -53,23 +54,31 @@ namespace WebRhProject.Controllers.API
                 return BadRequest(ex.Message);
             }
         }
-
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Cargo cargo)
+        public IActionResult Put(int id, [FromBody] CargoDTO cargoDTO)
         {
-            if (id != cargo.Id)
-            {
-                return BadRequest();
-            }
             try
             {
-                _cargoService.Update(cargo);
+                var existingCargo = _cargoService.FindById(id);
+
+                if (existingCargo == null)
+                {
+                    return NotFound();
+                }
+
+                // Atualize os dados do cargo com os valores do DTO
+                existingCargo.Nome = cargoDTO.Nome;
+
+                _cargoService.Update(existingCargo);
             }
             catch (NotFoundException)
             {
                 return NotFound();
             }
-            return NoContent();
+
+            return Ok(cargoDTO);
         }
+
+
     }
 }

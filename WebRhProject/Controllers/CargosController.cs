@@ -96,7 +96,7 @@ namespace WebRhProject.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome")] Cargo cargo)
+        public async Task<IActionResult> Edit(int id, [FromBody] Cargo cargo)
         {
             if (id != cargo.Id)
             {

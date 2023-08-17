@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using WebRhProject.Models;
+using WebRhProject.Models.dto;
 using WebRhProject.Services;
 using WebRhProject.Services.Exceptions;
 
@@ -58,21 +59,28 @@ namespace WebRhProject.Controllers.API
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, [FromBody] Usuario usuario)
+        public IActionResult Put(int id, [FromBody] UsuarioDTO usuarioDTO)
         {
-            if (id != usuario.Id)
-            {
-                return BadRequest();
-            }
             try
             {
-                _usuarioService.Update(usuario);
+                var existingUsuario = _usuarioService.FindById(id);
+
+                if (existingUsuario == null)
+                {
+                    return NotFound();
+                }
+
+                existingUsuario.Email = usuarioDTO.Email;
+                existingUsuario.Senha = usuarioDTO.Senha;
+
+                _usuarioService.Update(existingUsuario);
             }
             catch (NotFoundException)
             {
                 return NotFound();
             }
-            return NoContent();
+
+            return Ok(usuarioDTO);
         }
     }
 }
