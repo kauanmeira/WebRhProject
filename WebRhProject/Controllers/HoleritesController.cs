@@ -55,12 +55,13 @@ namespace WebRhProject.Controllers
                 MesAno = viewModel.Holerite.MesAno,
                 HorasNormais = viewModel.Holerite.HorasNormais,
                 DependentesHolerite = viewModel.Holerite.DependentesHolerite,
+                DescontoINSS = viewModel.Holerite.DescontoINSS,
+                DescontoIRRF = viewModel.Holerite.DescontoIRRF,
+                SalarioLiquido = viewModel.Holerite.SalarioLiquido,
                 Tipo = viewModel.Holerite.Tipo,
                 SalarioBruto = colaborador.SalarioBase
             };
 
-            // Realize os cálculos para os valores de desconto e salário líquido
-            holerite.CalcularHolerite();
 
             _holeriteService.InsertHolerite(holerite);
             return RedirectToAction(nameof(Index));
@@ -107,7 +108,6 @@ namespace WebRhProject.Controllers
                 return View(viewModel);
             }
 
-            holerite.CalcularHolerite();
 
             _holeriteService.UpdateHolerite(holerite);
             return RedirectToAction(nameof(Index));
@@ -154,25 +154,25 @@ namespace WebRhProject.Controllers
         {
             double descontoINSS = 0.0;
 
-            if (salarioBase <= 1100.00)
+            if (salarioBase <= 1320.00)
             {
-                descontoINSS = salarioBase * 0.075; // Alíquota de 7.5% para salários até R$ 1.100,00
+                descontoINSS = salarioBase * 0.075; // 7.5%
             }
-            else if (salarioBase <= 2203.48)
+            else if (salarioBase <= 2571.29)
             {
-                descontoINSS = salarioBase * 0.09; // Alíquota de 9% para salários de R$ 1.100,01 até R$ 2.203,48
+                descontoINSS = salarioBase * 0.09; // 9%
             }
-            else if (salarioBase <= 3305.22)
+            else if (salarioBase <= 3856.94)
             {
-                descontoINSS = salarioBase * 0.12; // Alíquota de 12% para salários de R$ 2.203,49 até R$ 3.305,22
+                descontoINSS = salarioBase * 0.12; // 12%
             }
-            else if (salarioBase <= 6433.57)
+            else if (salarioBase <= 7507.49)
             {
-                descontoINSS = salarioBase * 0.14; // Alíquota de 14% para salários de R$ 3.305,23 até R$ 6.433,57
+                descontoINSS = salarioBase * 0.14; // 14%
             }
             else
             {
-                descontoINSS = 751.99; // Valor fixo para salários acima de R$ 6.433,57 (teto máximo)
+                descontoINSS = 7507.49 * 0.14; // Valor máximo para a alíquota de 14%
             }
 
             return descontoINSS;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -20,6 +21,7 @@ namespace WebRhProject.Models
         [StringLength(20, MinimumLength = 3, ErrorMessage = "O tamanho do campo {0} deve ser entre {2} e {1} caracteres.")]
         public string Senha { get; set; }
         [NotMapped]
+        [DisplayName("Confirmar Senha")]
         [Required(ErrorMessage = "O campo Confirmar Senha é obrigatório.")]
         [StringLength(20, MinimumLength = 3, ErrorMessage = "O tamanho do campo {0} deve ser entre {2} e {1} caracteres.")]
         [Compare("Senha", ErrorMessage = "As senhas não correspondem.")]

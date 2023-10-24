@@ -64,7 +64,33 @@ namespace WebRhProject.Services
         }
         public List<Colaborador> FindAllActive()
         {
-            return _context.Colaborador.Where(c => c.Ativo == true).ToList();
+            return _context.Colaborador
+                .Where(c => c.Ativo == true)
+                .Join(
+                    _context.Cargo,
+                    colaborador => colaborador.CargoId,
+                    cargo => cargo.Id,
+                    (colaborador, cargo) => new { Colaborador = colaborador, Cargo = cargo }
+                )
+                .Join(
+                    _context.Empresa,
+                    colaboradorCargo => colaboradorCargo.Colaborador.EmpresaId,
+                    empresa => empresa.Id,
+                    (colaboradorCargo, empresa) => new Colaborador
+                    {
+                        Id = colaboradorCargo.Colaborador.Id,
+                        Nome = colaboradorCargo.Colaborador.Nome,
+                        Sobrenome = colaboradorCargo.Colaborador.Sobrenome,
+                        SalarioBase = colaboradorCargo.Colaborador.SalarioBase,
+                        Dependentes = colaboradorCargo.Colaborador.Dependentes,
+                        Filhos = colaboradorCargo.Colaborador.Filhos,
+                        DataNascimento = colaboradorCargo.Colaborador.DataNascimento,
+                        DataAdmissao = colaboradorCargo.Colaborador.DataAdmissao,
+                        Cargo = colaboradorCargo.Cargo,
+                        Empresa = empresa 
+                    }
+                )
+                .ToList();
         }
 
         public bool Exists(string cpf)

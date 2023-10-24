@@ -4,6 +4,7 @@ using System.Linq;
 using WebRhProject.Models;
 using WebRhProject.Data;
 using WebRhProject.Services.Exceptions;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebRhProject.Services
 {
@@ -18,8 +19,11 @@ namespace WebRhProject.Services
 
         public List<Holerite> GetAllHolerites()
         {
-            return _context.Holerite.ToList();
+            return _context.Holerite
+                .Include(h => h.Colaborador) // Certifique-se de incluir os dados do colaborador
+                .ToList();
         }
+
 
         public Holerite GetHoleriteById(int id)
         {
@@ -28,7 +32,6 @@ namespace WebRhProject.Services
 
         public void InsertHolerite(Holerite holerite)
         {
-            holerite.CalcularHolerite();
             _context.Holerite.Add(holerite);
             _context.SaveChanges(); // Salva as alterações no banco
         }

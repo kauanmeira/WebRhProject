@@ -22,5 +22,6 @@ namespace WebRhProject.Data
         public DbSet<Usuario>? Usuario { get; set; }
         public DbSet<Holerite>? Holerite { get; set; }
         public DbSet<WebRhProject.Models.Beneficio>? Beneficio { get; set; }
+        public DbSet<WebRhProject.Models.BeneficioColaborador>? BeneficioColaborador { get; set; }
     }
 }

@@ -14,12 +14,15 @@ namespace WebRhProject.Controllers
         private readonly ColaboradorService _colaboradorService;
         private readonly CargoService _cargoService;
         private readonly EmpresaService _empresaService;
+        private readonly ILogger<ColaboradoresController> _logger;
 
-        public ColaboradoresController(ColaboradorService colaboradorService, CargoService cargoService, EmpresaService empresaService)
+
+        public ColaboradoresController(ColaboradorService colaboradorService, CargoService cargoService, EmpresaService empresaService, ILogger<ColaboradoresController> logger)
         {
             _colaboradorService = colaboradorService;
             _cargoService = cargoService;
             _empresaService = empresaService;
+            _logger = logger;
         }
 
         public IActionResult Index()
@@ -262,5 +265,17 @@ namespace WebRhProject.Controllers
             _colaboradorService.Demitir(colaboradorId);
             return RedirectToAction(nameof(Index));
         }
+        public IActionResult ListarColaboradoresAtivos()
+        {
+            List<Colaborador> colaboradores = _colaboradorService.FindAllActive();
+
+            foreach (var colaborador in colaboradores)
+            {
+                _logger.LogInformation($"ID: {colaborador.Id}, Nome: {colaborador.Nome}, Departamento: {colaborador.Cargo?.Nome}");
+            }
+
+            return View(colaboradores);
+        }
+
     }
 }

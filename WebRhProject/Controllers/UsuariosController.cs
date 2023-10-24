@@ -79,7 +79,7 @@ namespace WebRhProject.Controllers
             }
 
             _usuarioService.Insert(usuario);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Login));
         }
 
         public IActionResult Delete(int? id)

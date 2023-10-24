@@ -1,5 +1,8 @@
-﻿namespace WebRhProject.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebRhProject.Models
 {
+    [Table("TbBeneficio")]
     public class Beneficio
     {
         public int Id { get; set; }
